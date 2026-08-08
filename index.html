@@ -256,7 +256,7 @@
             background: rgba(10, 5, 20, 0.7);
             border: 1px solid rgba(168, 85, 247, 0.4);
             border-radius: 18px;
-            padding: 20px;
+            padding: 18px;
             text-align: left;
             box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.1);
             margin-top: 15px;
@@ -266,42 +266,106 @@
             font-size: 16px;
             font-weight: 600;
             color: #06b6d4;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-bottom: 14px;
+            text-align: center;
         }
 
         .func-info {
             background: rgba(20, 10, 35, 0.6);
             border-radius: 12px;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border: 1px solid rgba(139, 92, 246, 0.2);
-            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
+        /* จัดทุกอย่างให้อยู่ใน 1 บรรทัด */
         .info-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
-            word-break: break-all;
+            white-space: nowrap;
+            gap: 6px;
         }
 
-        .info-row:last-child {
-            margin-bottom: 0;
+        .info-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            flex: 1;
         }
 
         .info-label {
             color: #a098be;
             font-size: 12px;
             font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            flex-shrink: 0;
         }
 
         .info-value {
             color: #ffffff;
-            font-family: monospace;
-            font-size: 13px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-transform: lowercase; /* บังคับตัวพิมพ์เล็ก */
+        }
+
+        /* ปุ่มคัดลอกรูปสี่เหลี่ยมเทาซ้อนกัน */
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 4px 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .copy-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+        }
+
+        .copy-icon {
+            width: 14px;
+            height: 14px;
+            fill: #8b8a9d;
+            transition: fill 0.2s;
+        }
+
+        .copy-btn:hover .copy-icon {
+            fill: #ffffff;
+        }
+
+        /* Popup แจ้งเตือนก็อปปี้ */
+        .copy-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(16, 185, 129, 0.9);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-family: 'Kanit', sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 99;
+        }
+        .copy-toast.show {
+            opacity: 1;
         }
     </style>
 </head>
@@ -364,17 +428,34 @@
             <!-- กรอบสี่เหลี่ยมรวมฟังก์ชัน -->
             <div class="function-card">
                 <div class="func-title">
-                    🎯 ยิงตัวโดนหัว
+                    ยิงตัวโดนหัว
                 </div>
                 
                 <div class="func-info">
+                    <!-- แถว Host (ใช้ตัวพิมพ์เล็กทั้งหมด) -->
                     <div class="info-row">
-                        <span class="info-label">Host:</span>
-                        <span class="info-value">proxy-realpooh-com.onrender.com</span>
+                        <div class="info-left">
+                            <span class="info-label">Host:</span>
+                            <span class="info-value" id="hostVal">proxyrp-zd0c.onrender.com</span>
+                        </div>
+                        <button class="copy-btn" onclick="copyText('proxyrp-zd0c.onrender.com', 'Host')" title="คัดลอก Host">
+                            <svg class="copy-icon" viewBox="0 0 24 24">
+                                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                            </svg>
+                        </button>
                     </div>
+
+                    <!-- แถว Port -->
                     <div class="info-row">
-                        <span class="info-label">Port:</span>
-                        <span class="info-value">10000</span>
+                        <div class="info-left">
+                            <span class="info-label">Port:</span>
+                            <span class="info-value" id="portVal">443</span>
+                        </div>
+                        <button class="copy-btn" onclick="copyText('443', 'Port')" title="คัดลอก Port">
+                            <svg class="copy-icon" viewBox="0 0 24 24">
+                                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -385,9 +466,12 @@
         </div>
     </div>
 
+    <!-- แจ้งเตือนเมื่อคัดลอกสำเร็จ -->
+    <div id="toast" class="copy-toast">คัดลอกสำเร็จ!</div>
+
     <script>
-        // Pattern: PROXYRP-{วัน}D-{ตัวเลขกี่ตัวก็ได้ตั้งแต่ 1 ตัวขึ้นไป}
-        const KEY_PATTERN = /^PROXYRP-\d+D-\d+$/;
+        // Pattern: PROXYRP-{วัน}D-{ตัวเลข/อักษร 5-10 ตัว}
+        const KEY_PATTERN = /^PROXYRP-\d+D-[a-zA-Z0-9]{5,10}$/;
 
         function verifyKey() {
             const inputKey = document.getElementById('accessKey').value.trim();
@@ -399,7 +483,6 @@
                 return;
             }
 
-            // ตรวจสอบรูปแบบคีย์แบบ Local Regex เท่านั้น
             if (KEY_PATTERN.test(inputKey)) {
                 statusMsg.className = 'status-msg text-success';
                 statusMsg.textContent = '✓ คีย์ถูกต้อง กำลังเข้าสู่หน้า UI...';
@@ -413,6 +496,30 @@
                 statusMsg.className = 'status-msg text-error';
                 statusMsg.textContent = '✕ คีย์ไม่ถูกต้อง หรือรูปแบบคีย์ไม่สมบูรณ์';
             }
+        }
+
+        // ฟังก์ชันคัดลอกข้อความ
+        function copyText(text, label) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`คัดลอก ${label} เรียบร้อยแล้ว`);
+            }).catch(() => {
+                const tempInput = document.createElement('input');
+                tempInput.value = text;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                showToast(`คัดลอก ${label} เรียบร้อยแล้ว`);
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
         }
     </script>
 
