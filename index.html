@@ -218,11 +218,6 @@
             box-shadow: 0 6px 25px rgba(217, 70, 239, 0.6);
         }
 
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
         /* ข้อความแจ้งเตือนผลลัพธ์ */
         .status-msg {
             margin-top: 15px;
@@ -240,7 +235,7 @@
             line-height: 1.6;
         }
 
-        /* ==================== หน้า UI หลังใส่คีย์สำเร็จ ==================== */
+        /* ==================== หน้า UI หลังใส่คีย์ถูกต้อง ==================== */
         .ui-header {
             font-size: 20px;
             font-weight: 600;
@@ -350,11 +345,11 @@
             <div id="statusMsg" class="status-msg"></div>
 
             <div class="footer-note">
-                ระบบจะตรวจสอบคีย์กับเซิร์ฟเวอร์โดยอัตโนมัติ
+                กรุณากรอกรหัสใช้งานที่ถูกต้องตามรูปแบบ
             </div>
         </div>
 
-        <!-- ==================== หน้า 2: หน้า UI ฟังชั่น PROXYRP (แสดงเมื่อคีย์ผ่าน) ==================== -->
+        <!-- ==================== หน้า 2: หน้า UI ฟังชั่น PROXYRP ==================== -->
         <div id="uiPage" class="hidden">
             <!-- โลโก้พร้อมขอบหมุน -->
             <div class="logo-wrapper">
@@ -366,7 +361,7 @@
                 ฟังชั่น <span class="ui-brand-text">PROXYRP</span>
             </div>
 
-            <!-- กรอบสี่เหลี่ยมฟังก์ชัน -->
+            <!-- กรอบสี่เหลี่ยมรวมฟังก์ชัน -->
             <div class="function-card">
                 <div class="func-title">
                     🎯 ยิงตัวโดนหัว
@@ -391,16 +386,12 @@
     </div>
 
     <script>
-        const PRIMARY_KEY_URL = 'https://realxpooh.github.io/Key-v4/';
-        const PROXY_KEY_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(PRIMARY_KEY_URL);
+        // Pattern: PROXYRP-{วัน}D-{ตัวเลขกี่ตัวก็ได้ตั้งแต่ 1 ตัวขึ้นไป}
+        const KEY_PATTERN = /^PROXYRP-\d+D-\d+$/;
 
-        // Regular Expression สำหรับตรวจจับโครงสร้าง PROXYRP-{วัน}D-{ตัวอักษร/ตัวเลข 5-10 ตัว}
-        const KEY_PATTERN = /^PROXYRP-\d+D-[a-zA-Z0-9]{5,10}$/;
-
-        async function verifyKey() {
+        function verifyKey() {
             const inputKey = document.getElementById('accessKey').value.trim();
             const statusMsg = document.getElementById('statusMsg');
-            const submitBtn = document.getElementById('submitBtn');
 
             if (!inputKey) {
                 statusMsg.className = 'status-msg text-error';
@@ -408,63 +399,19 @@
                 return;
             }
 
-            // 1. ตรวจสอบรูปแบบคีย์เบื้องต้น
-            if (!KEY_PATTERN.test(inputKey)) {
+            // ตรวจสอบรูปแบบคีย์แบบ Local Regex เท่านั้น
+            if (KEY_PATTERN.test(inputKey)) {
+                statusMsg.className = 'status-msg text-success';
+                statusMsg.textContent = '✓ คีย์ถูกต้อง กำลังเข้าสู่หน้า UI...';
+                
+                setTimeout(() => {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('uiPage').classList.remove('hidden');
+                }, 600);
+
+            } else {
                 statusMsg.className = 'status-msg text-error';
                 statusMsg.textContent = '✕ คีย์ไม่ถูกต้อง หรือรูปแบบคีย์ไม่สมบูรณ์';
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'กำลังตรวจสอบคีย์...';
-            statusMsg.className = 'status-msg';
-            statusMsg.textContent = '';
-
-            try {
-                let rawData = '';
-                const cacheBuster = '?t=' + new Date().getTime();
-
-                try {
-                    const res = await fetch(PRIMARY_KEY_URL + cacheBuster, { cache: 'no-store' });
-                    if (res.ok) {
-                        rawData = await res.text();
-                    } else {
-                        throw new Error('Primary fetch failed');
-                    }
-                } catch (e) {
-                    const proxyRes = await fetch(PROXY_KEY_URL + '&t=' + new Date().getTime());
-                    if (proxyRes.ok) {
-                        rawData = await proxyRes.text();
-                    } else {
-                        throw new Error('Proxy fetch failed');
-                    }
-                }
-
-                const cleanInputKey = inputKey.replace(/\s+/g, '');
-
-                // 2. ตรวจสอบคีย์จริงกับเว็บ Key-v4
-                if (rawData && rawData.includes(cleanInputKey)) {
-                    statusMsg.className = 'status-msg text-success';
-                    statusMsg.textContent = '✓ คีย์ถูกต้อง กำลังเข้าสู่หน้า UI...';
-                    
-                    // สลับไปแสดงหน้า UI ฟังชั่น PROXYRP หลังผ่านไป 1 วินาที
-                    setTimeout(() => {
-                        document.getElementById('loginPage').classList.add('hidden');
-                        document.getElementById('uiPage').classList.remove('hidden');
-                    }, 1000);
-
-                } else {
-                    statusMsg.className = 'status-msg text-error';
-                    statusMsg.textContent = '✕ คีย์ไม่ถูกต้อง หรือไม่ได้มาจากระบบ Key-v4';
-                }
-
-            } catch (error) {
-                statusMsg.className = 'status-msg text-error';
-                statusMsg.textContent = '✕ เกิดข้อผิดพลาดในการดึงข้อมูลจากเซิร์ฟเวอร์';
-                console.error(error);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'เริ่มต้นใช้งาน';
             }
         }
     </script>
