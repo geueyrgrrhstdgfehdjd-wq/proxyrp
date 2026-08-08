@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PROXYRP - Client System</title>
     
-    <!-- ฟอนต์ภาษาอังกฤษ/ตัวเลขไซเบอร์ (Orbitron) และภาษาไทย (Kanit) -->
+    <!-- ฟอนต์ Orbitron และ Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
@@ -43,7 +43,12 @@
             position: relative;
         }
 
-        /* ส่วนวงกลมโลโก้พร้อมขอบหมุนเรืองแสง */
+        /* ส่วนซ่อนหน้าจอ */
+        .hidden {
+            display: none !important;
+        }
+
+        /* โลโก้พร้อมขอบหมุน */
         .logo-wrapper {
             position: relative;
             width: 110px;
@@ -54,7 +59,6 @@
             align-items: center;
         }
 
-        /* เส้นขอบนอกหมุนได้ (Spinning Ring) */
         .spinning-ring {
             position: absolute;
             width: 100%;
@@ -69,17 +73,11 @@
             box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
         }
 
-        /* อนิเมชันการหมุน */
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* โลโก้รูปภาพตรงกลาง */
         .logo-img {
             width: 90px;
             height: 90px;
@@ -165,7 +163,7 @@
             background: linear-gradient(90deg, rgba(147, 51, 234, 0.5), transparent);
         }
 
-        /* ช่อง Input กรอกคีย์ */
+        /* ช่อง Input */
         .input-group {
             text-align: left;
             margin-bottom: 25px;
@@ -241,53 +239,163 @@
             font-weight: 300;
             line-height: 1.6;
         }
+
+        /* ==================== หน้า UI หลังใส่คีย์สำเร็จ ==================== */
+        .ui-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .ui-brand-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            color: #d946ef;
+            letter-spacing: 1px;
+        }
+
+        /* กรอบสี่เหลี่ยมรวมฟังก์ชัน */
+        .function-card {
+            background: rgba(10, 5, 20, 0.7);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: left;
+            box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.1);
+            margin-top: 15px;
+        }
+
+        .func-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #06b6d4;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .func-info {
+            background: rgba(20, 10, 35, 0.6);
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            font-size: 13px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            word-break: break-all;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            color: #a098be;
+            font-size: 12px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-family: monospace;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
 
     <div class="card-container">
-        <!-- โลโก้พร้อมขอบหมุน -->
-        <div class="logo-wrapper">
-            <div class="spinning-ring"></div>
-            <img class="logo-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535662070480109719/D4555718-EFA6-474F-9496-834A7CB21DF3.png?ex=6a789440&is=6a7742c0&hm=cc1492fe3b1e0db5550cdbfc398d8f539d735132a686fbc2ed04904390a768d8&" alt="PROXYRP Logo">
+        <!-- ==================== หน้า 1: ล็อกอินใส่คีย์ ==================== -->
+        <div id="loginPage">
+            <!-- โลโก้พร้อมขอบหมุน -->
+            <div class="logo-wrapper">
+                <div class="spinning-ring"></div>
+                <img class="logo-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535662070480109719/D4555718-EFA6-474F-9496-834A7CB21DF3.png?ex=6a789440&is=6a7742c0&hm=cc1492fe3b1e0db5550cdbfc398d8f539d735132a686fbc2ed04904390a768d8&" alt="PROXYRP Logo">
+            </div>
+
+            <!-- ข้อความส่วนหัว -->
+            <div class="brand-name">PROXYRP</div>
+            <div>
+                <span class="status-badge"><span class="status-dot"></span>LIVE</span>
+                <span class="subtitle">Client System</span>
+            </div>
+
+            <div class="login-title">เข้าสู่ระบบด้วยคีย์ใช้งาน</div>
+
+            <!-- หัวข้อแท็บ -->
+            <div class="auth-divider">
+                <span class="auth-tag">AUTH</span>
+                <span class="auth-label">เข้าสู่ระบบ</span>
+                <div class="auth-line"></div>
+            </div>
+
+            <!-- ช่องใส่คีย์ -->
+            <div class="input-group">
+                <label class="input-label">รหัสใช้งาน / Access Key</label>
+                <input type="text" id="accessKey" class="input-box" placeholder="กรอกรหัสคีย์ของคุณที่นี่..." autocomplete="off">
+            </div>
+
+            <!-- ปุ่มยืนยัน -->
+            <button class="submit-btn" id="submitBtn" onclick="verifyKey()">เริ่มต้นใช้งาน</button>
+
+            <!-- ข้อความแสดงผลการตรวจคีย์ -->
+            <div id="statusMsg" class="status-msg"></div>
+
+            <div class="footer-note">
+                ระบบจะตรวจสอบคีย์กับเซิร์ฟเวอร์โดยอัตโนมัติ
+            </div>
         </div>
 
-        <!-- ข้อความส่วนหัว -->
-        <div class="brand-name">PROXYRP</div>
-        <div>
-            <span class="status-badge"><span class="status-dot"></span>LIVE</span>
-            <span class="subtitle">Client System</span>
-        </div>
+        <!-- ==================== หน้า 2: หน้า UI ฟังชั่น PROXYRP (แสดงเมื่อคีย์ผ่าน) ==================== -->
+        <div id="uiPage" class="hidden">
+            <!-- โลโก้พร้อมขอบหมุน -->
+            <div class="logo-wrapper">
+                <div class="spinning-ring"></div>
+                <img class="logo-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535662070480109719/D4555718-EFA6-474F-9496-834A7CB21DF3.png?ex=6a789440&is=6a7742c0&hm=cc1492fe3b1e0db5550cdbfc398d8f539d735132a686fbc2ed04904390a768d8&" alt="PROXYRP Logo">
+            </div>
 
-        <div class="login-title">เข้าสู่ระบบด้วยคีย์ใช้งาน</div>
+            <div class="ui-header">
+                ฟังชั่น <span class="ui-brand-text">PROXYRP</span>
+            </div>
 
-        <!-- หัวข้อแท็บ -->
-        <div class="auth-divider">
-            <span class="auth-tag">AUTH</span>
-            <span class="auth-label">เข้าสู่ระบบ</span>
-            <div class="auth-line"></div>
-        </div>
+            <!-- กรอบสี่เหลี่ยมฟังก์ชัน -->
+            <div class="function-card">
+                <div class="func-title">
+                    🎯 ยิงตัวโดนหัว
+                </div>
+                
+                <div class="func-info">
+                    <div class="info-row">
+                        <span class="info-label">Host:</span>
+                        <span class="info-value">proxy-realpooh-com.onrender.com</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Port:</span>
+                        <span class="info-value">10000</span>
+                    </div>
+                </div>
+            </div>
 
-        <!-- ช่องใส่คีย์ -->
-        <div class="input-group">
-            <label class="input-label">รหัสใช้งาน / Access Key</label>
-            <input type="text" id="accessKey" class="input-box" placeholder="กรอกรหัสคีย์ของคุณที่นี่..." autocomplete="off">
-        </div>
-
-        <!-- ปุ่มยืนยัน -->
-        <button class="submit-btn" id="submitBtn" onclick="verifyKey()">เริ่มต้นใช้งาน</button>
-
-        <!-- ข้อความแสดงผลการตรวจคีย์ -->
-        <div id="statusMsg" class="status-msg"></div>
-
-        <div class="footer-note">
-            ระบบจะตรวจสอบคีย์กับเซิร์ฟเวอร์โดยอัตโนมัติ
+            <div class="footer-note" style="margin-top: 25px;">
+                ระบบกำลังทำงานและเชื่อมต่อเซิร์ฟเวอร์
+            </div>
         </div>
     </div>
 
     <script>
         const PRIMARY_KEY_URL = 'https://realxpooh.github.io/Key-v4/';
         const PROXY_KEY_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(PRIMARY_KEY_URL);
+
+        // Regular Expression สำหรับตรวจจับโครงสร้าง PROXYRP-{วัน}D-{ตัวอักษร/ตัวเลข 5-10 ตัว}
+        const KEY_PATTERN = /^PROXYRP-\d+D-[a-zA-Z0-9]{5,10}$/;
 
         async function verifyKey() {
             const inputKey = document.getElementById('accessKey').value.trim();
@@ -297,6 +405,13 @@
             if (!inputKey) {
                 statusMsg.className = 'status-msg text-error';
                 statusMsg.textContent = 'กรุณากรอกรหัสใช้งาน (Access Key)';
+                return;
+            }
+
+            // 1. ตรวจสอบรูปแบบคีย์เบื้องต้น
+            if (!KEY_PATTERN.test(inputKey)) {
+                statusMsg.className = 'status-msg text-error';
+                statusMsg.textContent = '✕ คีย์ไม่ถูกต้อง หรือรูปแบบคีย์ไม่สมบูรณ์';
                 return;
             }
 
@@ -327,13 +442,16 @@
 
                 const cleanInputKey = inputKey.replace(/\s+/g, '');
 
+                // 2. ตรวจสอบคีย์จริงกับเว็บ Key-v4
                 if (rawData && rawData.includes(cleanInputKey)) {
                     statusMsg.className = 'status-msg text-success';
-                    statusMsg.textContent = '✓ คีย์ถูกต้อง เข้าสู่ระบบสำเร็จ!';
+                    statusMsg.textContent = '✓ คีย์ถูกต้อง กำลังเข้าสู่หน้า UI...';
                     
+                    // สลับไปแสดงหน้า UI ฟังชั่น PROXYRP หลังผ่านไป 1 วินาที
                     setTimeout(() => {
-                        // window.location.href = "https://your-target-url.com";
-                    }, 1500);
+                        document.getElementById('loginPage').classList.add('hidden');
+                        document.getElementById('uiPage').classList.remove('hidden');
+                    }, 1000);
 
                 } else {
                     statusMsg.className = 'status-msg text-error';
