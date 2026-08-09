@@ -28,7 +28,6 @@
             padding: 20px;
         }
 
-        /* การ์ดหลักทรงมนนีออน */
         .card-container {
             width: 100%;
             max-width: 420px;
@@ -43,12 +42,10 @@
             position: relative;
         }
 
-        /* ส่วนซ่อนหน้าจอ */
         .hidden {
             display: none !important;
         }
 
-        /* โลโก้พร้อมขอบหมุน */
         .logo-wrapper {
             position: relative;
             width: 110px;
@@ -88,7 +85,6 @@
             z-index: 1;
         }
 
-        /* ชื่อแบรนด์ PROXYRP */
         .brand-name {
             font-family: 'Orbitron', sans-serif;
             font-size: 24px;
@@ -98,7 +94,6 @@
             margin-bottom: 6px;
         }
 
-        /* สถานะ LIVE */
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -135,7 +130,6 @@
             margin-bottom: 25px;
         }
 
-        /* เส้นแบ่งหัวข้อ AUTH */
         .auth-divider {
             display: flex;
             align-items: center;
@@ -163,7 +157,6 @@
             background: linear-gradient(90deg, rgba(147, 51, 234, 0.5), transparent);
         }
 
-        /* ช่อง Input */
         .input-group {
             text-align: left;
             margin-bottom: 25px;
@@ -198,7 +191,6 @@
             color: #4c4665;
         }
 
-        /* ปุ่มเริ่มต้นใช้งาน */
         .submit-btn {
             width: 100%;
             background: linear-gradient(90deg, #a855f7 0%, #d946ef 100%);
@@ -218,7 +210,6 @@
             box-shadow: 0 6px 25px rgba(217, 70, 239, 0.6);
         }
 
-        /* ข้อความแสดงผลการตรวจคีย์ */
         .status-msg {
             margin-top: 15px;
             font-size: 13px;
@@ -235,11 +226,11 @@
             line-height: 1.6;
         }
 
-        /* ==================== หน้า UI หลังใส่คีย์ถูกต้อง ==================== */
+        /* ==================== UI หลังเข้าสู่ระบบ ==================== */
         .ui-header {
             font-size: 20px;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #ffffff;
             text-align: center;
         }
@@ -251,14 +242,38 @@
             letter-spacing: 1px;
         }
 
-        /* กรอบแสดงรายการฟังก์ชัน */
+        /* กล่องนับถอยหลังเวลา */
+        .timer-box {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            border-radius: 14px;
+            padding: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timer-label {
+            font-size: 12px;
+            color: #a098be;
+        }
+
+        .timer-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            color: #06b6d4;
+            letter-spacing: 1px;
+        }
+
         .function-card {
             background: rgba(10, 5, 20, 0.7);
             border: 1px solid rgba(168, 85, 247, 0.4);
             border-radius: 18px;
             padding: 16px 18px;
             box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.1);
-            margin-top: 15px;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -274,7 +289,6 @@
             border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
-        /* ใช้ฟอนต์ Orbitron สำหรับชื่อฟังก์ชัน */
         .toggle-label {
             font-family: 'Orbitron', sans-serif;
             font-size: 14px;
@@ -284,7 +298,6 @@
             text-transform: uppercase;
         }
 
-        /* สไตล์ Toggle Switch */
         .switch {
             position: relative;
             display: inline-block;
@@ -334,7 +347,6 @@
             background-color: #ffffff;
         }
 
-        /* ==================== ส่วนเลือกไฟล์และรันระบบ ==================== */
         .file-section {
             margin-top: 15px;
             background: rgba(20, 10, 35, 0.6);
@@ -399,6 +411,28 @@
             box-shadow: 0 6px 25px rgba(217, 70, 239, 0.6);
         }
 
+        /* ปุ่มออกจากระบบและลบคีย์ */
+        .logout-btn {
+            width: 100%;
+            margin-top: 10px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            border-radius: 25px;
+            padding: 10px;
+            color: #ef4444;
+            font-size: 14px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
         .run-status {
             margin-top: 10px;
             font-size: 12px;
@@ -413,13 +447,11 @@
     <div class="card-container">
         <!-- ==================== หน้า 1: ล็อกอินใส่คีย์ ==================== -->
         <div id="loginPage">
-            <!-- โลโก้พร้อมขอบหมุน -->
             <div class="logo-wrapper">
                 <div class="spinning-ring"></div>
                 <img class="logo-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535662070480109719/D4555718-EFA6-474F-9496-834A7CB21DF3.png?ex=6a789440&is=6a7742c0&hm=cc1492fe3b1e0db5550cdbfc398d8f539d735132a686fbc2ed04904390a768d8&" alt="PROXYRP Logo">
             </div>
 
-            <!-- ข้อความส่วนหัว -->
             <div class="brand-name">PROXYRP</div>
             <div>
                 <span class="status-badge"><span class="status-dot"></span>LIVE</span>
@@ -428,23 +460,19 @@
 
             <div class="login-title">เข้าสู่ระบบด้วยคีย์ใช้งาน</div>
 
-            <!-- หัวข้อแท็บ -->
             <div class="auth-divider">
                 <span class="auth-tag">AUTH</span>
                 <span class="auth-label">เข้าสู่ระบบ</span>
                 <div class="auth-line"></div>
             </div>
 
-            <!-- ช่องใส่คีย์ -->
             <div class="input-group">
                 <label class="input-label">รหัสใช้งาน / Access Key</label>
                 <input type="text" id="accessKey" class="input-box" placeholder="เช่น PROXYRP-1D-A1B2C3" autocomplete="off">
             </div>
 
-            <!-- ปุ่มยืนยัน -->
             <button class="submit-btn" id="submitBtn" onclick="verifyKey()">เริ่มต้นใช้งาน</button>
 
-            <!-- ข้อความแสดงผลการตรวจคีย์ -->
             <div id="statusMsg" class="status-msg"></div>
 
             <div class="footer-note">
@@ -454,7 +482,6 @@
 
         <!-- ==================== หน้า 2: หน้า UI ฟังชั่น PROXYRP ==================== -->
         <div id="uiPage" class="hidden">
-            <!-- โลโก้พร้อมขอบหมุน -->
             <div class="logo-wrapper">
                 <div class="spinning-ring"></div>
                 <img class="logo-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535662070480109719/D4555718-EFA6-474F-9496-834A7CB21DF3.png?ex=6a789440&is=6a7742c0&hm=cc1492fe3b1e0db5550cdbfc398d8f539d735132a686fbc2ed04904390a768d8&" alt="PROXYRP Logo">
@@ -464,9 +491,13 @@
                 ฟังก์ชัน <span class="ui-brand-text">PROXYRP</span>
             </div>
 
-            <!-- กรอบแสดงรายการสวิตช์เปิด/ปิด (จำลอง) -->
+            <!-- แสดงเวลาถอยหลัง -->
+            <div class="timer-box">
+                <span class="timer-label">เวลาใช้งานคงเหลือ:</span>
+                <span class="timer-value" id="countdownDisplay">24:00:00</span>
+            </div>
+
             <div class="function-card">
-                <!-- Aimlock -->
                 <div class="toggle-item">
                     <span class="toggle-label">Aimlock</span>
                     <label class="switch">
@@ -475,7 +506,6 @@
                     </label>
                 </div>
 
-                <!-- Aimbot -->
                 <div class="toggle-item">
                     <span class="toggle-label">Aimbot</span>
                     <label class="switch">
@@ -484,7 +514,6 @@
                     </label>
                 </div>
 
-                <!-- FPS 144 -->
                 <div class="toggle-item">
                     <span class="toggle-label">FPS 144</span>
                     <label class="switch">
@@ -493,7 +522,6 @@
                     </label>
                 </div>
 
-                <!-- Bypass -->
                 <div class="toggle-item">
                     <span class="toggle-label">Bypass</span>
                     <label class="switch">
@@ -503,15 +531,15 @@
                 </div>
             </div>
 
-            <!-- ส่วนเลือกไฟล์และรันสคริปต์ -->
             <div class="file-section">
                 <input type="file" id="scriptFileInput" class="file-input-hidden" accept=".txt,.json,.lua" onchange="updateFileName(this)">
                 <label for="scriptFileInput" class="file-select-btn">📂 เลือกไฟล์สคริปต์ (.txt / .json / .lua)</label>
                 <div class="file-name-display" id="fileNameDisplay">ยังไม่ได้เลือกไฟล์</div>
             </div>
 
-            <!-- ปุ่มรันไฟล์ -->
             <button class="run-btn" onclick="runScriptAndLaunchGame()">EXECUTE & LAUNCH</button>
+            <button class="logout-btn" onclick="logoutAndRevokeKey()">LOGOUT & DELETE KEY</button>
+            
             <div id="runStatus" class="run-status"></div>
 
             <div class="footer-note" style="margin-top: 15px;">
@@ -521,7 +549,14 @@
     </div>
 
     <script>
-        const KEY_PATTERN = /^PROXYRP-\d+D-[A-Z0-9]{1,10}$/;
+        const KEY_PATTERN = /^PROXYRP-\d+D-[\w\-]+$/i;
+        
+        let countdownTimer = null;
+        let remainingSeconds = 86400; // เวลาเริ่มต้น 24 ชั่วโมง (86400 วินาที)
+        let activeKey = "";
+
+        // บันทึกรายการคีย์ที่ถูกยกเลิกใช้งานแล้ว
+        let revokedKeys = JSON.parse(localStorage.getItem('proxyrp_revoked_keys') || '[]');
 
         function verifyKey() {
             const inputKey = document.getElementById('accessKey').value.trim();
@@ -533,13 +568,22 @@
                 return;
             }
 
+            // ตรวจสอบว่าคีย์เคยถูกลบ/ยกเลิกไปแล้วหรือไม่
+            if (revokedKeys.includes(inputKey)) {
+                statusMsg.className = 'status-msg text-error';
+                statusMsg.textContent = '✕ คีย์นี้ถูกลบออกจากระบบแล้ว ไม่สามารถใช้งานได้อีก';
+                return;
+            }
+
             if (KEY_PATTERN.test(inputKey)) {
+                activeKey = inputKey;
                 statusMsg.className = 'status-msg text-success';
                 statusMsg.textContent = '✓ คีย์ถูกต้อง กำลังเข้าสู่หน้า UI...';
                 
                 setTimeout(() => {
                     document.getElementById('loginPage').classList.add('hidden');
                     document.getElementById('uiPage').classList.remove('hidden');
+                    startCountdown(); // เริ่มนับถอยหลังเมื่อเข้า UI
                 }, 600);
 
             } else {
@@ -548,7 +592,59 @@
             }
         }
 
-        // แสดงชื่อไฟล์ที่ถูกเลือก
+        // เริ่มนับถอยหลังเวลาใช้งาน
+        function startCountdown() {
+            clearInterval(countdownTimer);
+            updateTimerDisplay();
+
+            countdownTimer = setInterval(() => {
+                remainingSeconds--;
+                if (remainingSeconds <= 0) {
+                    clearInterval(countdownTimer);
+                    alert("เวลาใช้งานของคุณหมดลงแล้ว ระบบจะนำคุณออกจาก UI");
+                    exitToLogin();
+                } else {
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(remainingSeconds / 3600);
+            const minutes = Math.floor((remainingSeconds % 3600) / 60);
+            const seconds = remainingSeconds % 60;
+
+            const formatted = 
+                String(hours).padStart(2, '0') + ':' +
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds).padStart(2, '0');
+
+            document.getElementById('countdownDisplay').textContent = formatted;
+        }
+
+        // ปุ่มออกจากระบบพร้อมยกเลิกคีย์
+        function logoutAndRevokeKey() {
+            if (confirm("คุณต้องการออกจากระบบและลบคีย์นี้ออกจากระบบใช่หรือไม่? (คีย์จะไม่สามารถใช้งานได้อีก)")) {
+                if (activeKey) {
+                    revokedKeys.push(activeKey);
+                    localStorage.setItem('proxyrp_revoked_keys', JSON.stringify(revokedKeys));
+                }
+                exitToLogin();
+            }
+        }
+
+        function exitToLogin() {
+            clearInterval(countdownTimer);
+            activeKey = "";
+            document.getElementById('accessKey').value = "";
+            document.getElementById('uiPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            
+            const statusMsg = document.getElementById('statusMsg');
+            statusMsg.className = 'status-msg text-error';
+            statusMsg.textContent = 'ออกจากระบบแล้ว (คีย์ถูกยกเลิกการใช้งาน)';
+        }
+
         function updateFileName(input) {
             const display = document.getElementById('fileNameDisplay');
             if (input.files && input.files.length > 0) {
@@ -558,7 +654,6 @@
             }
         }
 
-        // ฟังก์ชันรันไฟล์แล้วเปิด Free Fire TH (ธรรมดา ไม่ใช่ MAX)
         function runScriptAndLaunchGame() {
             const fileInput = document.getElementById('scriptFileInput');
             const runStatus = document.getElementById('runStatus');
@@ -572,16 +667,12 @@
             runStatus.style.color = '#10b981';
             runStatus.textContent = '✓ กำลังรันไฟล์ และเปิด Free Fire TH...';
 
-            // จำลองการรันระบบ 1.2 วินาที แล้วสั่งเปิดเกม Free Fire TH (freefireth)
             setTimeout(() => {
-                // Scheme สำหรับเปิดเกม Free Fire TH (ธรรมดา: com.dts.freefireth)
                 const freefireIntent = 'intent://launch/#Intent;package=com.dts.freefireth;scheme=freefire;end';
                 const freefireUri = 'freefireth://';
 
-                // พยายามเปิดผ่าน Intent / URL Scheme
                 window.location.href = freefireIntent;
 
-                // สำรองด้วย Scheme ตรง
                 setTimeout(() => {
                     window.location.href = freefireUri;
                 }, 300);
