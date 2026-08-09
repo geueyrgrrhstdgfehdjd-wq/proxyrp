@@ -477,7 +477,7 @@
         <div id="loginPage">
             <div class="logo-wrapper">
                 <div class="spinning-ring"></div>
-                <img class="logo-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535662070480109719/D4555718-EFA6-474F-9496-834A7CB21DF3.png?ex=6a789440&is=6a7742c0&hm=cc1492fe3b1e0db5550cdbfc398d8f539d735132a686fbc2ed04904390a768d8&" alt="PROXYRP Logo">
+                <img class="logo-img" src="https://i.postimg.cc/w7mJsfB7/image.png" alt="PROXYRP Logo">
             </div>
 
             <div class="brand-name">PROXYRP</div>
@@ -510,7 +510,7 @@
         <div id="uiPage" class="hidden">
             <div class="logo-wrapper">
                 <div class="spinning-ring"></div>
-                <img class="logo-img" src="https://cdn.discordapp.com/attachments/1533053333546336346/1535662070480109719/D4555718-EFA6-474F-9496-834A7CB21DF3.png?ex=6a789440&is=6a7742c0&hm=cc1492fe3b1e0db5550cdbfc398d8f539d735132a686fbc2ed04904390a768d8&" alt="PROXYRP Logo">
+                <img class="logo-img" src="https://i.postimg.cc/w7mJsfB7/image.png" alt="PROXYRP Logo">
             </div>
 
             <div class="ui-header">
@@ -588,7 +588,6 @@
 
         let revokedKeys = JSON.parse(localStorage.getItem('proxyrp_revoked_keys') || '[]');
 
-        // เช็ค Session อัตโนมัติเมื่อรีเฟรชหน้าเว็บ
         window.addEventListener('DOMContentLoaded', () => {
             const savedSession = JSON.parse(localStorage.getItem('proxyrp_active_session') || 'null');
             if (savedSession && savedSession.key && savedSession.expireAt) {
@@ -651,7 +650,6 @@
                 activeKey = inputKey;
                 expireTimestamp = Date.now() + (durationSeconds * 1000);
 
-                // บันทึก Session ลง LocalStorage เพื่อรีเว็บแล้วไม่หลุด
                 localStorage.setItem('proxyrp_active_session', JSON.stringify({
                     key: activeKey,
                     expireAt: expireTimestamp
@@ -724,7 +722,7 @@
 
         function exitToLogin() {
             clearInterval(countdownTimer);
-            localStorage.removeItem('proxyrp_active_session'); // ลบ Session
+            localStorage.removeItem('proxyrp_active_session');
             activeKey = "";
             expireTimestamp = 0;
             document.getElementById('accessKey').value = "";
