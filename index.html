@@ -8,7 +8,7 @@
     <!-- ฟอนต์ Orbitron และ Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         * {
@@ -218,7 +218,7 @@
             box-shadow: 0 6px 25px rgba(217, 70, 239, 0.6);
         }
 
-        /* ข้อความแจ้งเตือนผลลัพธ์ */
+        /* ข้อความแสดงผลการตรวจคีย์ */
         .status-msg {
             margin-top: 15px;
             font-size: 13px;
@@ -239,7 +239,7 @@
         .ui-header {
             font-size: 20px;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #ffffff;
             text-align: center;
         }
@@ -251,121 +251,160 @@
             letter-spacing: 1px;
         }
 
-        /* กรอบสี่เหลี่ยมรวมฟังก์ชัน */
+        /* กรอบแสดงรายการฟังก์ชัน */
         .function-card {
             background: rgba(10, 5, 20, 0.7);
             border: 1px solid rgba(168, 85, 247, 0.4);
             border-radius: 18px;
-            padding: 18px;
-            text-align: left;
+            padding: 16px 18px;
             box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.1);
             margin-top: 15px;
-        }
-
-        .func-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #06b6d4;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-
-        .func-info {
-            background: rgba(20, 10, 35, 0.6);
-            border-radius: 12px;
-            padding: 10px 12px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        /* จัดทุกอย่างให้อยู่ใน 1 บรรทัด */
-        .info-row {
+        .toggle-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            white-space: nowrap;
-            gap: 6px;
+            background: rgba(20, 10, 35, 0.6);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
-        .info-left {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            min-width: 0;
-            flex: 1;
-        }
-
-        .info-label {
-            color: #a098be;
-            font-size: 12px;
+        /* ใช้ฟอนต์ Orbitron สำหรับชื่อฟังก์ชัน */
+        .toggle-label {
             font-family: 'Orbitron', sans-serif;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .info-value {
+            font-size: 14px;
+            font-weight: 700;
             color: #ffffff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            letter-spacing: 0.3px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            text-transform: lowercase; /* บังคับตัวพิมพ์เล็ก */
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        /* ปุ่มคัดลอกรูปสี่เหลี่ยมเทาซ้อนกัน */
-        .copy-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
-            padding: 4px 6px;
+        /* สไตล์ Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #2a2438;
+            transition: .3s;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .copy-btn:hover {
-            background: rgba(168, 85, 247, 0.2);
-            border-color: #a855f7;
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: #8b8a9d;
+            transition: .3s;
+            border-radius: 50%;
         }
 
-        .copy-icon {
-            width: 14px;
-            height: 14px;
-            fill: #8b8a9d;
-            transition: fill 0.2s;
+        input:checked + .slider {
+            background-color: #a855f7;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+            border-color: #d946ef;
         }
 
-        .copy-btn:hover .copy-icon {
-            fill: #ffffff;
+        input:checked + .slider:before {
+            transform: translateX(20px);
+            background-color: #ffffff;
         }
 
-        /* Popup แจ้งเตือนก็อปปี้ */
-        .copy-toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(16, 185, 129, 0.9);
-            color: #fff;
+        /* ==================== ส่วนเลือกไฟล์และรันระบบ ==================== */
+        .file-section {
+            margin-top: 15px;
+            background: rgba(20, 10, 35, 0.6);
+            border: 1px dashed rgba(168, 85, 247, 0.4);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .file-input-hidden {
+            display: none;
+        }
+
+        .file-select-btn {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid #a855f7;
+            color: #d946ef;
             padding: 8px 16px;
             border-radius: 20px;
-            font-size: 12px;
-            font-family: 'Kanit', sans-serif;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 99;
+            font-size: 13px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 8px;
         }
-        .copy-toast.show {
-            opacity: 1;
+
+        .file-select-btn:hover {
+            background: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+        }
+
+        .file-name-display {
+            font-size: 12px;
+            color: #06b6d4;
+            font-family: 'Orbitron', sans-serif;
+            word-break: break-all;
+            min-height: 18px;
+        }
+
+        .run-btn {
+            width: 100%;
+            margin-top: 15px;
+            background: linear-gradient(90deg, #06b6d4 0%, #a855f7 50%, #d946ef 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 12px;
+            color: #ffffff;
+            font-size: 16px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .run-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 25px rgba(217, 70, 239, 0.6);
+        }
+
+        .run-status {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #10b981;
+            font-family: 'Orbitron', sans-serif;
+            min-height: 18px;
         }
     </style>
 </head>
@@ -399,7 +438,7 @@
             <!-- ช่องใส่คีย์ -->
             <div class="input-group">
                 <label class="input-label">รหัสใช้งาน / Access Key</label>
-                <input type="text" id="accessKey" class="input-box" placeholder="กรอกรหัสคีย์ของคุณที่นี่..." autocomplete="off">
+                <input type="text" id="accessKey" class="input-box" placeholder="เช่น PROXYRP-1D-A1B2C3" autocomplete="off">
             </div>
 
             <!-- ปุ่มยืนยัน -->
@@ -422,56 +461,67 @@
             </div>
 
             <div class="ui-header">
-                ฟังชั่น <span class="ui-brand-text">PROXYRP</span>
+                ฟังก์ชัน <span class="ui-brand-text">PROXYRP</span>
             </div>
 
-            <!-- กรอบสี่เหลี่ยมรวมฟังก์ชัน -->
+            <!-- กรอบแสดงรายการสวิตช์เปิด/ปิด (จำลอง) -->
             <div class="function-card">
-                <div class="func-title">
-                    ยิงตัวโดนหัว
+                <!-- Aimlock -->
+                <div class="toggle-item">
+                    <span class="toggle-label">Aimlock</span>
+                    <label class="switch">
+                        <input type="checkbox" id="aimlockToggle">
+                        <span class="slider"></span>
+                    </label>
                 </div>
-                
-                <div class="func-info">
-                    <!-- แถว Host (ใช้ตัวพิมพ์เล็กทั้งหมด) -->
-                    <div class="info-row">
-                        <div class="info-left">
-                            <span class="info-label">Host:</span>
-                            <span class="info-value" id="hostVal">proxyrp-zd0c.onrender.com</span>
-                        </div>
-                        <button class="copy-btn" onclick="copyText('proxyrp-zd0c.onrender.com', 'Host')" title="คัดลอก Host">
-                            <svg class="copy-icon" viewBox="0 0 24 24">
-                                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                            </svg>
-                        </button>
-                    </div>
 
-                    <!-- แถว Port -->
-                    <div class="info-row">
-                        <div class="info-left">
-                            <span class="info-label">Port:</span>
-                            <span class="info-value" id="portVal">443</span>
-                        </div>
-                        <button class="copy-btn" onclick="copyText('443', 'Port')" title="คัดลอก Port">
-                            <svg class="copy-icon" viewBox="0 0 24 24">
-                                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                            </svg>
-                        </button>
-                    </div>
+                <!-- Aimbot -->
+                <div class="toggle-item">
+                    <span class="toggle-label">Aimbot</span>
+                    <label class="switch">
+                        <input type="checkbox" id="aimbotToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- FPS 144 -->
+                <div class="toggle-item">
+                    <span class="toggle-label">FPS 144</span>
+                    <label class="switch">
+                        <input type="checkbox" id="fpsToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Bypass -->
+                <div class="toggle-item">
+                    <span class="toggle-label">Bypass</span>
+                    <label class="switch">
+                        <input type="checkbox" id="bypassToggle">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
 
-            <div class="footer-note" style="margin-top: 25px;">
-                ระบบกำลังทำงานและเชื่อมต่อเซิร์ฟเวอร์
+            <!-- ส่วนเลือกไฟล์และรันสคริปต์ -->
+            <div class="file-section">
+                <input type="file" id="scriptFileInput" class="file-input-hidden" accept=".txt,.json,.lua" onchange="updateFileName(this)">
+                <label for="scriptFileInput" class="file-select-btn">📂 เลือกไฟล์สคริปต์ (.txt / .json / .lua)</label>
+                <div class="file-name-display" id="fileNameDisplay">ยังไม่ได้เลือกไฟล์</div>
+            </div>
+
+            <!-- ปุ่มรันไฟล์ -->
+            <button class="run-btn" onclick="runScriptAndLaunchGame()">EXECUTE & LAUNCH</button>
+            <div id="runStatus" class="run-status"></div>
+
+            <div class="footer-note" style="margin-top: 15px;">
+                ระบบกำลังทำงานและเตรียมการเชื่อมต่อ Free Fire TH
             </div>
         </div>
     </div>
 
-    <!-- แจ้งเตือนเมื่อคัดลอกสำเร็จ -->
-    <div id="toast" class="copy-toast">คัดลอกสำเร็จ!</div>
-
     <script>
-        // Pattern: PROXYRP-{วัน}D-{ตัวเลข/อักษร 5-10 ตัว}
-        const KEY_PATTERN = /^PROXYRP-\d+D-[a-zA-Z0-9]{5,10}$/;
+        const KEY_PATTERN = /^PROXYRP-\d+D-[A-Z0-9]{1,10}$/;
 
         function verifyKey() {
             const inputKey = document.getElementById('accessKey').value.trim();
@@ -498,28 +548,44 @@
             }
         }
 
-        // ฟังก์ชันคัดลอกข้อความ
-        function copyText(text, label) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast(`คัดลอก ${label} เรียบร้อยแล้ว`);
-            }).catch(() => {
-                const tempInput = document.createElement('input');
-                tempInput.value = text;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                showToast(`คัดลอก ${label} เรียบร้อยแล้ว`);
-            });
+        // แสดงชื่อไฟล์ที่ถูกเลือก
+        function updateFileName(input) {
+            const display = document.getElementById('fileNameDisplay');
+            if (input.files && input.files.length > 0) {
+                display.textContent = '📄 ' + input.files[0].name;
+            } else {
+                display.textContent = 'ยังไม่ได้เลือกไฟล์';
+            }
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.classList.add('show');
+        // ฟังก์ชันรันไฟล์แล้วเปิด Free Fire TH (ธรรมดา ไม่ใช่ MAX)
+        function runScriptAndLaunchGame() {
+            const fileInput = document.getElementById('scriptFileInput');
+            const runStatus = document.getElementById('runStatus');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                runStatus.style.color = '#ef4444';
+                runStatus.textContent = '✕ กรุณาเลือกไฟล์สคริปต์ก่อนรัน';
+                return;
+            }
+
+            runStatus.style.color = '#10b981';
+            runStatus.textContent = '✓ กำลังรันไฟล์ และเปิด Free Fire TH...';
+
+            // จำลองการรันระบบ 1.2 วินาที แล้วสั่งเปิดเกม Free Fire TH (freefireth)
             setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
+                // Scheme สำหรับเปิดเกม Free Fire TH (ธรรมดา: com.dts.freefireth)
+                const freefireIntent = 'intent://launch/#Intent;package=com.dts.freefireth;scheme=freefire;end';
+                const freefireUri = 'freefireth://';
+
+                // พยายามเปิดผ่าน Intent / URL Scheme
+                window.location.href = freefireIntent;
+
+                // สำรองด้วย Scheme ตรง
+                setTimeout(() => {
+                    window.location.href = freefireUri;
+                }, 300);
+            }, 1200);
         }
     </script>
 
