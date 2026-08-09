@@ -3,773 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROXYRP - Client System</title>
-    
-    <!-- ฟอนต์ Orbitron และ Kanit -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
-
+    <title>แผงกดคีย์</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Kanit', sans-serif;
-            user-select: none;
+            font-family: 'Prompt', -apple-system, sans-serif;
         }
 
         body {
-            background: #030008;
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(217, 70, 239, 0.15), transparent 60%),
-                radial-gradient(circle at 50% 100%, rgba(6, 182, 212, 0.1), transparent 60%);
+            background-color: #030008;
             color: #ffffff;
-            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
             padding: 20px;
-            overflow-x: hidden;
         }
 
-        /* Glassmorphism Card Style */
-        .card-container {
+        .container {
             width: 100%;
-            max-width: 410px;
-            background: rgba(13, 8, 26, 0.75);
-            border-radius: 30px;
-            padding: 35px 26px;
-            border: 1px solid rgba(217, 70, 239, 0.25);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
-                        0 0 30px rgba(168, 85, 247, 0.15),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
+            max-width: 420px;
+            background: rgba(18, 10, 28, 0.85);
+            border: 1px solid #3c1e5d;
+            border-radius: 28px;
+            padding: 30px 20px;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.25);
             text-align: center;
             position: relative;
         }
 
-        .hidden {
-            display: none !important;
-        }
-
-        /* Logo Avatar */
-        .logo-wrapper {
-            position: relative;
-            width: 105px;
-            height: 105px;
-            margin: 0 auto 18px;
+        .avatar-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 2px solid #a855f7;
+            box-shadow: 0 0 20px #a855f7, inset 0 0 15px rgba(168, 85, 247, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
+            background: #000;
         }
 
-        .spinning-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            border-top-color: #d946ef;
-            border-right-color: #06b6d4;
-            animation: spin 3s linear infinite;
-            filter: drop-shadow(0 0 8px rgba(217, 70, 239, 0.6));
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .logo-img {
-            width: 86px;
-            height: 86px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
-            z-index: 1;
-        }
-
-        /* Brand & Headers */
-        .brand-name {
+        .avatar-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 26px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, #ffffff 0%, #d946ef 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid rgba(16, 185, 129, 0.4);
-            color: #34d399;
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 800;
+            color: #c084fc;
+            text-shadow: 0 0 8px #a855f7;
             letter-spacing: 1px;
         }
 
-        .status-dot {
+        .title-brand {
+            font-family: 'Prompt', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .badge-live {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid #10b981;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge-live::before {
+            content: "";
             width: 6px;
             height: 6px;
-            background-color: #34d399;
+            background: #10b981;
             border-radius: 50%;
-            box-shadow: 0 0 8px #34d399;
-            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 6px #10b981;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        .subtitle {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-left: 6px;
-            font-weight: 300;
-        }
-
-        .auth-divider {
+        .auth-title {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 22px 0 20px;
-        }
-
-        .auth-tag {
-            font-family: 'Orbitron', sans-serif;
-            color: #06b6d4;
-            font-weight: 800;
             font-size: 12px;
-            letter-spacing: 1.5px;
-            background: rgba(6, 182, 212, 0.1);
-            padding: 2px 8px;
-            border-radius: 6px;
-            border: 1px solid rgba(6, 182, 212, 0.3);
-        }
-
-        .auth-label {
-            color: #e2e8f0;
-            font-weight: 500;
-            font-size: 13px;
-        }
-
-        .auth-line {
-            flex-grow: 1;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(217, 70, 239, 0.4), transparent);
-        }
-
-        /* Input Controls */
-        .input-group {
+            color: #a855f7;
+            font-weight: bold;
+            margin-bottom: 20px;
             text-align: left;
-            margin-bottom: 22px;
         }
 
-        .input-label {
-            font-size: 12px;
-            color: #a78bfa;
-            margin-bottom: 8px;
+        .auth-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #3c1e5d;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .input-group label {
             display: block;
-            font-weight: 400;
-            letter-spacing: 0.5px;
+            font-size: 13px;
+            color: #9ca3af;
+            margin-bottom: 8px;
         }
 
-        .input-box {
+        .input-field, .select-field {
             width: 100%;
-            background: rgba(5, 2, 12, 0.6);
-            border: 1px solid rgba(168, 85, 247, 0.25);
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #3c1e5d;
             border-radius: 16px;
-            padding: 14px 18px;
-            color: #fff;
+            padding: 12px 16px;
+            color: #ffffff;
             font-size: 14px;
             outline: none;
             transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .input-box:focus {
-            border-color: #d946ef;
-            box-shadow: 0 0 15px rgba(217, 70, 239, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        .input-field:focus, .select-field:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
         }
 
-        .input-box::placeholder {
-            color: #475569;
+        .select-field option {
+            background-color: #120a1c;
+            color: #fff;
         }
 
-        /* Buttons */
-        .submit-btn {
+        .btn-submit {
             width: 100%;
-            background: linear-gradient(135deg, #a855f7 0%, #d946ef 100%);
+            background: linear-gradient(90deg, #8b5cf6, #d946ef);
             border: none;
-            border-radius: 16px;
+            border-radius: 25px;
             padding: 14px;
-            color: #ffffff;
+            color: white;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(217, 70, 239, 0.35);
-            transition: all 0.25s ease;
-            letter-spacing: 1px;
+            margin-top: 10px;
+            box-shadow: 0 0 20px rgba(217, 70, 239, 0.4);
+            transition: transform 0.1s;
         }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(217, 70, 239, 0.5);
-            filter: brightness(1.1);
+        .btn-submit:active {
+            transform: scale(0.98);
         }
 
-        .status-msg {
-            margin-top: 15px;
-            font-size: 12.5px;
-            min-height: 20px;
-            font-weight: 400;
-        }
-        .text-error { color: #f87171; }
-        .text-success { color: #34d399; }
-
-        .footer-note {
-            margin-top: 18px;
-            font-size: 11.5px;
-            color: #64748b;
-            font-weight: 300;
-        }
-
-        /* UI Screen */
-        .ui-header {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #ffffff;
-        }
-
-        .ui-brand-text {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            color: #d946ef;
-            letter-spacing: 1.5px;
-        }
-
-        .timer-box {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            border-radius: 16px;
-            padding: 12px 18px;
-            margin-bottom: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
-        }
-
-        .timer-label {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
-        .timer-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 15px;
-            font-weight: 800;
-            color: #38bdf8;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-        }
-
-        .function-card {
-            background: rgba(5, 2, 12, 0.5);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 20px;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toggle-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 12px 16px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: all 0.2s ease;
-        }
-
-        .toggle-item:hover {
-            border-color: rgba(168, 85, 247, 0.3);
-            background: rgba(168, 85, 247, 0.05);
-        }
-
-        .toggle-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: #f1f5f9;
-            letter-spacing: 1px;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 46px;
-            height: 24px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255, 255, 255, 0.1);
-            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 2px;
-            bottom: 2px;
-            background-color: #94a3b8;
-            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background: linear-gradient(135deg, #a855f7, #d946ef);
-            border-color: transparent;
-            box-shadow: 0 0 12px rgba(217, 70, 239, 0.5);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(22px);
-            background-color: #ffffff;
-        }
-
-        .file-section {
-            margin-top: 14px;
-            background: rgba(5, 2, 12, 0.5);
-            border: 1px dashed rgba(6, 182, 212, 0.4);
-            border-radius: 16px;
-            padding: 14px;
-            transition: all 0.25s ease;
-        }
-
-        .file-section:hover {
-            border-color: #06b6d4;
-            background: rgba(6, 182, 212, 0.03);
-        }
-
-        .file-input-hidden {
+        .modal-overlay {
             display: none;
-        }
-
-        .file-select-btn {
-            display: flex;
-            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
             justify-content: center;
-            gap: 8px;
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(168, 85, 247, 0.15));
-            border: 1px solid rgba(6, 182, 212, 0.4);
-            color: #38bdf8;
-            padding: 10px 16px;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: #120a1c;
+            border: 1px solid #a855f7;
+            border-radius: 20px;
+            padding: 25px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-box h3 {
+            color: #10b981;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .key-list-box {
+            background: #000;
+            border: 1px solid #3c1e5d;
             border-radius: 12px;
-            font-size: 12px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            width: 100%;
-        }
-
-        .file-select-btn:hover {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.3), rgba(168, 85, 247, 0.3));
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
-            color: #ffffff;
-        }
-
-        .file-name-display {
-            font-size: 11.5px;
-            color: #94a3b8;
-            margin-top: 8px;
+            padding: 12px;
+            max-height: 180px;
+            overflow-y: auto;
+            text-align: left;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 13px;
+            color: #c084fc;
+            white-space: pre-wrap;
             word-break: break-all;
-            min-height: 16px;
         }
 
-        .run-btn {
-            width: 100%;
-            margin-top: 14px;
-            background: linear-gradient(135deg, #06b6d4 0%, #a855f7 50%, #d946ef 100%);
+        .btn-copy {
+            background: #a855f7;
+            color: white;
             border: none;
-            border-radius: 16px;
-            padding: 13px;
-            color: #ffffff;
-            font-size: 15px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 800;
-            letter-spacing: 1.5px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.35);
-            transition: all 0.25s ease;
-        }
-
-        .run-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(217, 70, 239, 0.5);
-            filter: brightness(1.1);
-        }
-
-        .logout-btn {
             width: 100%;
-            margin-top: 10px;
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 16px;
-            padding: 10px;
-            color: #f87171;
-            font-size: 12px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .btn-close {
+            background: transparent;
+            color: #9ca3af;
+            border: none;
+            font-size: 13px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            padding: 5px;
         }
 
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: #ef4444;
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-        }
-
-        .run-status {
-            margin-top: 10px;
-            font-size: 12px;
-            min-height: 18px;
-            font-weight: 500;
+        .toast {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <div class="card-container">
-        <!-- ==================== หน้า 1: ล็อกอินใส่คีย์ ==================== -->
-        <div id="loginPage">
-            <div class="logo-wrapper">
-                <div class="spinning-ring"></div>
-                <img class="logo-img" src="https://i.postimg.cc/w7mJsfB7/image.png" alt="PROXYRP Logo">
+    <div class="container">
+        <div class="avatar-container">
+            <span class="avatar-text">MRPCS</span>
+        </div>
+
+        <h1 class="title-brand">แผงกดคีย์</h1>
+        <div class="badge-container">
+            <span class="badge-live">LIVE</span>
+            <span style="color: #6b7280;">Key Generator</span>
+        </div>
+
+        <div class="auth-title">
+            <span>GENERATE</span>
+            <span style="color: #fff;">สร้างคีย์ใช้งาน</span>
+        </div>
+
+        <form id="keyForm" onsubmit="generateKeys(event)">
+            <div class="input-group">
+                <label>ประเภทระยะเวลา</label>
+                <select id="duration-type" class="select-field" onchange="toggleDayInput()">
+                    <option value="day">รายวัน (Day)</option>
+                    <option value="month">รายเดือน (Month)</option>
+                    <option value="lifetime">ถาวร (Lifetime)</option>
+                </select>
             </div>
 
-            <div class="brand-name">PROXYRP</div>
-            <div>
-                <span class="status-badge"><span class="status-dot"></span>LIVE</span>
-                <span class="subtitle">Client System</span>
-            </div>
-
-            <div class="auth-divider">
-                <span class="auth-tag">AUTH</span>
-                <span class="auth-label">เข้าสู่ระบบด้วยคีย์ใช้งาน</span>
-                <div class="auth-line"></div>
+            <div class="input-group" id="amount-days-group">
+                <label id="duration-label">จำนวนวัน</label>
+                <input type="number" id="duration-value" class="input-field" value="1" min="1" required>
             </div>
 
             <div class="input-group">
-                <label class="input-label">รหัสใช้งาน / ACCESS KEY</label>
-                <input type="text" id="accessKey" class="input-box" placeholder="กรอกรหัสใช้งานของคุณที่นี่..." autocomplete="off">
+                <label>จำนวนคีย์ที่ต้องการสร้าง</label>
+                <input type="number" id="key-count" class="input-field" value="1" min="1" max="100" required>
             </div>
 
-            <button class="submit-btn" id="submitBtn" onclick="verifyKey()">เริ่มต้นใช้งาน</button>
+            <button type="submit" class="btn-submit">รับคีย์</button>
+        </form>
+    </div>
 
-            <div id="statusMsg" class="status-msg"></div>
-
-            <div class="footer-note">
-                กรุณากรอกรหัสใช้งานที่ถูกต้องเพื่อเข้าสู่ระบบ
-            </div>
-        </div>
-
-        <!-- ==================== หน้า 2: หน้า UI ฟังชั่น PROXYRP ==================== -->
-        <div id="uiPage" class="hidden">
-            <div class="logo-wrapper">
-                <div class="spinning-ring"></div>
-                <img class="logo-img" src="https://i.postimg.cc/w7mJsfB7/image.png" alt="PROXYRP Logo">
-            </div>
-
-            <div class="ui-header">
-                ฟังก์ชัน <span class="ui-brand-text">PROXYRP</span>
-            </div>
-
-            <div class="timer-box">
-                <span class="timer-label">เวลาใช้งานคงเหลือ</span>
-                <span class="timer-value" id="countdownDisplay">--:--:--</span>
-            </div>
-
-            <div class="function-card">
-                <div class="toggle-item">
-                    <span class="toggle-label">Aimlock</span>
-                    <label class="switch">
-                        <input type="checkbox" id="aimlockToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="toggle-item">
-                    <span class="toggle-label">Aimbot</span>
-                    <label class="switch">
-                        <input type="checkbox" id="aimbotToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="toggle-item">
-                    <span class="toggle-label">FPS 144</span>
-                    <label class="switch">
-                        <input type="checkbox" id="fpsToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="toggle-item">
-                    <span class="toggle-label">Bypass</span>
-                    <label class="switch">
-                        <input type="checkbox" id="bypassToggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="file-section">
-                <input type="file" id="scriptFileInput" class="file-input-hidden" accept=".txt,.json,.lua" onchange="updateFileName(this)">
-                <label for="scriptFileInput" class="file-select-btn">
-                    <span>📂</span>
-                    <span>เลือกไฟล์สคริปต์ (.txt / .json / .lua)</span>
-                </label>
-                <div class="file-name-display" id="fileNameDisplay">ยังไม่ได้เลือกไฟล์</div>
-            </div>
-
-            <button class="run-btn" onclick="runScriptAndLaunchGame()">EXECUTE & LAUNCH</button>
-            <button class="logout-btn" onclick="logoutAndRevokeKey()">LOGOUT & DELETE KEY</button>
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-box">
+            <h3>✓ สร้างคีย์สำเร็จ!</h3>
+            <p style="font-size: 13px; color: #9ca3af;">รายการคีย์ของคุณ (ไม่ซ้ำกัน):</p>
             
-            <div id="runStatus" class="run-status"></div>
+            <div class="key-list-box" id="keyList"></div>
 
-            <div class="footer-note">
-                ระบบพร้อมทำงาน เชื่อมต่อบริการ Free Fire TH
-            </div>
+            <button class="btn-copy" onclick="copyKeys()">ก๊อปปี้คีย์ทั้งหมด</button>
+            <button class="btn-close" onclick="closeModal()">ปิดหน้าต่าง</button>
         </div>
     </div>
 
+    <div class="toast" id="toast">คัดลอกคีย์เรียบร้อยแล้ว!</div>
+
     <script>
-        const DAY_PATTERN = /^PROXY-(\d+)D-(\d{1,10})$/i;
-        const MONTH_PATTERN = /^PROXY-(\d+)M-(\d{1,10})$/i;
-        const YEAR_PATTERN = /^PROXY-(\d+)Y-(\d{1,10})$/i;
-        const INF_PATTERN = /^PROXY-INF-(\d{1,10})$/i;
+        function toggleDayInput() {
+            const type = document.getElementById('duration-type').value;
+            const daysGroup = document.getElementById('amount-days-group');
+            const label = document.getElementById('duration-label');
+            const input = document.getElementById('duration-value');
 
-        let countdownTimer = null;
-        let activeKey = "";
-        let expireTimestamp = 0;
-
-        let revokedKeys = JSON.parse(localStorage.getItem('proxyrp_revoked_keys') || '[]');
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedSession = JSON.parse(localStorage.getItem('proxyrp_active_session') || 'null');
-            if (savedSession && savedSession.key && savedSession.expireAt) {
-                if (revokedKeys.includes(savedSession.key)) {
-                    localStorage.removeItem('proxyrp_active_session');
-                    return;
-                }
-                const now = Date.now();
-                if (now < savedSession.expireAt) {
-                    activeKey = savedSession.key;
-                    expireTimestamp = savedSession.expireAt;
-                    showUiPage();
-                } else {
-                    localStorage.removeItem('proxyrp_active_session');
-                }
-            }
-        });
-
-        function verifyKey() {
-            const inputKey = document.getElementById('accessKey').value.trim();
-            const statusMsg = document.getElementById('statusMsg');
-
-            if (!inputKey) {
-                statusMsg.className = 'status-msg text-error';
-                statusMsg.textContent = 'กรุณากรอกรหัสใช้งาน (Access Key)';
-                return;
-            }
-
-            if (revokedKeys.includes(inputKey)) {
-                statusMsg.className = 'status-msg text-error';
-                statusMsg.textContent = '✕ คีย์นี้ถูกลบออกจากระบบแล้ว ไม่สามารถใช้งานได้อีก';
-                return;
-            }
-
-            let valid = false;
-            let durationSeconds = 0;
-
-            const dayMatch = inputKey.match(DAY_PATTERN);
-            if (dayMatch) {
-                valid = true;
-                durationSeconds = parseInt(dayMatch[1], 10) * 24 * 3600;
+            if (type === 'lifetime') {
+                daysGroup.style.display = 'none';
+                input.removeAttribute('required');
             } else {
-                const monthMatch = inputKey.match(MONTH_PATTERN);
-                if (monthMatch) {
-                    valid = true;
-                    durationSeconds = parseInt(monthMatch[1], 10) * 30 * 24 * 3600;
-                } else {
-                    const yearMatch = inputKey.match(YEAR_PATTERN);
-                    if (yearMatch) {
-                        valid = true;
-                        durationSeconds = parseInt(yearMatch[1], 10) * 365 * 24 * 3600;
-                    } else if (INF_PATTERN.test(inputKey)) {
-                        valid = true;
-                        durationSeconds = 999 * 365 * 24 * 3600;
-                    }
-                }
+                daysGroup.style.display = 'block';
+                input.setAttribute('required', 'required');
+                label.innerText = type === 'day' ? 'จำนวนวัน' : 'จำนวนเดือน';
             }
+        }
 
-            if (valid) {
-                activeKey = inputKey;
-                expireTimestamp = Date.now() + (durationSeconds * 1000);
+        // ฟังก์ชันสุ่มตัวเลขความยาว 1-10 หลัก
+        function getRandomDigits() {
+            const length = Math.floor(Math.random() * 10) + 1; // ความยาว 1 ถึง 10 หลัก
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += Math.floor(Math.random() * 10);
+            }
+            return result;
+        }
 
-                localStorage.setItem('proxyrp_active_session', JSON.stringify({
-                    key: activeKey,
-                    expireAt: expireTimestamp
-                }));
+        function generateKeys(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('duration-type').value;
+            const durationVal = document.getElementById('duration-value').value;
+            const count = parseInt(document.getElementById('key-count').value);
+            
+            const usedNumbers = new Set(); // ใช้สำหรับเช็คว่าเลขท้ายซ้ำกันหรือไม่
+            let generatedKeys = [];
 
-                statusMsg.className = 'status-msg text-success';
-                statusMsg.textContent = '✓ คีย์ถูกต้อง กำลังเข้าสู่ระบบ...';
+            while (usedNumbers.size < count) {
+                const randomNum = getRandomDigits();
                 
-                setTimeout(() => {
-                    showUiPage();
-                }, 600);
-
-            } else {
-                statusMsg.className = 'status-msg text-error';
-                statusMsg.textContent = '✕ คีย์ไม่ถูกต้อง กรุณาตรวจสอบรหัสอีกครั้ง';
-            }
-        }
-
-        function showUiPage() {
-            document.getElementById('loginPage').classList.add('hidden');
-            document.getElementById('uiPage').classList.remove('hidden');
-            startCountdown();
-        }
-
-        function startCountdown() {
-            clearInterval(countdownTimer);
-            updateTimerDisplay();
-
-            countdownTimer = setInterval(() => {
-                const remaining = Math.floor((expireTimestamp - Date.now()) / 1000);
-                if (remaining > 0) {
-                    updateTimerDisplay();
-                } else {
-                    clearInterval(countdownTimer);
-                    alert("เวลาใช้งานของคุณหมดลงแล้ว ระบบจะนำคุณออกจากระบบ");
-                    exitToLogin();
+                // ตรวจสอบว่าสุ่มได้ตัวเลขที่ไม่ซ้ำเดิม
+                if (!usedNumbers.has(randomNum)) {
+                    usedNumbers.add(randomNum);
+                    
+                    let key = '';
+                    if (type === 'day') {
+                        key = `PROXYRP-${durationVal}D-${randomNum}`;
+                    } else if (type === 'month') {
+                        key = `PROXYRP-${durationVal}M-${randomNum}`;
+                    } else if (type === 'lifetime') {
+                        key = `PROXYRP-INF-${randomNum}`;
+                    }
+                    
+                    generatedKeys.push(key);
                 }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const remainingSeconds = Math.max(0, Math.floor((expireTimestamp - Date.now()) / 1000));
-            
-            if (remainingSeconds > 300000000) {
-                document.getElementById('countdownDisplay').textContent = "UNLIMITED";
-                return;
             }
 
-            const hours = Math.floor(remainingSeconds / 3600);
-            const minutes = Math.floor((remainingSeconds % 3600) / 60);
-            const seconds = remainingSeconds % 60;
-
-            const formatted = 
-                String(hours).padStart(2, '0') + ':' +
-                String(minutes).padStart(2, '0') + ':' +
-                String(seconds).padStart(2, '0');
-
-            document.getElementById('countdownDisplay').textContent = formatted;
+            document.getElementById('keyList').innerText = generatedKeys.join('\n');
+            document.getElementById('resultModal').style.display = 'flex';
         }
 
-        function logoutAndRevokeKey() {
-            if (confirm("คุณต้องการออกจากระบบและลบคีย์นี้ใช่หรือไม่? (คีย์จะไม่สามารถนำกลับมาใช้ได้อีก)")) {
-                if (activeKey) {
-                    revokedKeys.push(activeKey);
-                    localStorage.setItem('proxyrp_revoked_keys', JSON.stringify(revokedKeys));
-                }
-                exitToLogin();
-            }
-        }
-
-        function exitToLogin() {
-            clearInterval(countdownTimer);
-            localStorage.removeItem('proxyrp_active_session');
-            activeKey = "";
-            expireTimestamp = 0;
-            document.getElementById('accessKey').value = "";
-            document.getElementById('uiPage').classList.add('hidden');
-            document.getElementById('loginPage').classList.remove('hidden');
-            
-            const statusMsg = document.getElementById('statusMsg');
-            statusMsg.className = 'status-msg text-error';
-            statusMsg.textContent = 'ออกจากระบบเรียบร้อยแล้ว';
-        }
-
-        function updateFileName(input) {
-            const display = document.getElementById('fileNameDisplay');
-            if (input.files && input.files.length > 0) {
-                display.style.color = '#38bdf8';
-                display.textContent = '📄 ' + input.files[0].name;
-            } else {
-                display.style.color = '#94a3b8';
-                display.textContent = 'ยังไม่ได้เลือกไฟล์';
-            }
-        }
-
-        function runScriptAndLaunchGame() {
-            const fileInput = document.getElementById('scriptFileInput');
-            const runStatus = document.getElementById('runStatus');
-
-            if (!fileInput.files || fileInput.files.length === 0) {
-                runStatus.className = 'run-status text-error';
-                runStatus.textContent = '✕ กรุณาเลือกไฟล์สคริปต์ก่อนรัน';
-                return;
-            }
-
-            runStatus.className = 'run-status text-success';
-            runStatus.textContent = '✓ กำลังรันไฟล์ และเปิด Free Fire TH...';
-
-            setTimeout(() => {
-                const freefireIntent = 'intent://launch/#Intent;package=com.dts.freefireth;scheme=freefire;end';
-                const freefireUri = 'freefireth://';
-
-                window.location.href = freefireIntent;
-
+        function copyKeys() {
+            const keyText = document.getElementById('keyList').innerText;
+            navigator.clipboard.writeText(keyText).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
                 setTimeout(() => {
-                    window.location.href = freefireUri;
-                }, 300);
-            }, 1200);
+                    toast.style.display = 'none';
+                }, 2000);
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').style.display = 'none';
         }
     </script>
-
 </body>
 </html>
