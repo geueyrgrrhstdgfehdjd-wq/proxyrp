@@ -229,10 +229,6 @@
             filter: brightness(1.1);
         }
 
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
         .status-msg {
             margin-top: 15px;
             font-size: 12.5px;
@@ -290,7 +286,6 @@
             text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
         }
 
-        /* Toggles Container */
         .function-card {
             background: rgba(5, 2, 12, 0.5);
             border: 1px solid rgba(168, 85, 247, 0.2);
@@ -325,7 +320,6 @@
             letter-spacing: 1px;
         }
 
-        /* Custom Modern Switch */
         .switch {
             position: relative;
             display: inline-block;
@@ -372,7 +366,6 @@
             background-color: #ffffff;
         }
 
-        /* File Select UI */
         .file-section {
             margin-top: 14px;
             background: rgba(5, 2, 12, 0.5);
@@ -423,7 +416,6 @@
             min-height: 16px;
         }
 
-        /* Action Buttons */
         .run-btn {
             width: 100%;
             margin-top: 14px;
@@ -591,10 +583,29 @@
         const INF_PATTERN = /^PROXY-INF-(\d{1,10})$/i;
 
         let countdownTimer = null;
-        let remainingSeconds = 0;
         let activeKey = "";
+        let expireTimestamp = 0;
 
         let revokedKeys = JSON.parse(localStorage.getItem('proxyrp_revoked_keys') || '[]');
+
+        // เช็ค Session อัตโนมัติเมื่อรีเฟรชหน้าเว็บ
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedSession = JSON.parse(localStorage.getItem('proxyrp_active_session') || 'null');
+            if (savedSession && savedSession.key && savedSession.expireAt) {
+                if (revokedKeys.includes(savedSession.key)) {
+                    localStorage.removeItem('proxyrp_active_session');
+                    return;
+                }
+                const now = Date.now();
+                if (now < savedSession.expireAt) {
+                    activeKey = savedSession.key;
+                    expireTimestamp = savedSession.expireAt;
+                    showUiPage();
+                } else {
+                    localStorage.removeItem('proxyrp_active_session');
+                }
+            }
+        });
 
         function verifyKey() {
             const inputKey = document.getElementById('accessKey').value.trim();
@@ -618,24 +629,18 @@
             const dayMatch = inputKey.match(DAY_PATTERN);
             if (dayMatch) {
                 valid = true;
-                const days = parseInt(dayMatch[1], 10);
-                durationSeconds = days * 24 * 3600;
-            } 
-            else {
+                durationSeconds = parseInt(dayMatch[1], 10) * 24 * 3600;
+            } else {
                 const monthMatch = inputKey.match(MONTH_PATTERN);
                 if (monthMatch) {
                     valid = true;
-                    const months = parseInt(monthMatch[1], 10);
-                    durationSeconds = months * 30 * 24 * 3600;
-                }
-                else {
+                    durationSeconds = parseInt(monthMatch[1], 10) * 30 * 24 * 3600;
+                } else {
                     const yearMatch = inputKey.match(YEAR_PATTERN);
                     if (yearMatch) {
                         valid = true;
-                        const years = parseInt(yearMatch[1], 10);
-                        durationSeconds = years * 365 * 24 * 3600;
-                    }
-                    else if (INF_PATTERN.test(inputKey)) {
+                        durationSeconds = parseInt(yearMatch[1], 10) * 365 * 24 * 3600;
+                    } else if (INF_PATTERN.test(inputKey)) {
                         valid = true;
                         durationSeconds = 999 * 365 * 24 * 3600;
                     }
@@ -644,14 +649,19 @@
 
             if (valid) {
                 activeKey = inputKey;
-                remainingSeconds = durationSeconds;
+                expireTimestamp = Date.now() + (durationSeconds * 1000);
+
+                // บันทึก Session ลง LocalStorage เพื่อรีเว็บแล้วไม่หลุด
+                localStorage.setItem('proxyrp_active_session', JSON.stringify({
+                    key: activeKey,
+                    expireAt: expireTimestamp
+                }));
+
                 statusMsg.className = 'status-msg text-success';
                 statusMsg.textContent = '✓ คีย์ถูกต้อง กำลังเข้าสู่ระบบ...';
                 
                 setTimeout(() => {
-                    document.getElementById('loginPage').classList.add('hidden');
-                    document.getElementById('uiPage').classList.remove('hidden');
-                    startCountdown();
+                    showUiPage();
                 }, 600);
 
             } else {
@@ -660,13 +670,19 @@
             }
         }
 
+        function showUiPage() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('uiPage').classList.remove('hidden');
+            startCountdown();
+        }
+
         function startCountdown() {
             clearInterval(countdownTimer);
             updateTimerDisplay();
 
             countdownTimer = setInterval(() => {
-                if (remainingSeconds > 0) {
-                    remainingSeconds--;
+                const remaining = Math.floor((expireTimestamp - Date.now()) / 1000);
+                if (remaining > 0) {
                     updateTimerDisplay();
                 } else {
                     clearInterval(countdownTimer);
@@ -677,6 +693,8 @@
         }
 
         function updateTimerDisplay() {
+            const remainingSeconds = Math.max(0, Math.floor((expireTimestamp - Date.now()) / 1000));
+            
             if (remainingSeconds > 300000000) {
                 document.getElementById('countdownDisplay').textContent = "UNLIMITED";
                 return;
@@ -706,7 +724,9 @@
 
         function exitToLogin() {
             clearInterval(countdownTimer);
+            localStorage.removeItem('proxyrp_active_session'); // ลบ Session
             activeKey = "";
+            expireTimestamp = 0;
             document.getElementById('accessKey').value = "";
             document.getElementById('uiPage').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
