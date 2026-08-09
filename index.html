@@ -242,7 +242,6 @@
             letter-spacing: 1px;
         }
 
-        /* กล่องนับถอยหลังเวลา */
         .timer-box {
             background: rgba(6, 182, 212, 0.1);
             border: 1px solid rgba(6, 182, 212, 0.4);
@@ -411,7 +410,6 @@
             box-shadow: 0 6px 25px rgba(217, 70, 239, 0.6);
         }
 
-        /* ปุ่มออกจากระบบและลบคีย์ */
         .logout-btn {
             width: 100%;
             margin-top: 10px;
@@ -468,7 +466,7 @@
 
             <div class="input-group">
                 <label class="input-label">รหัสใช้งาน / Access Key</label>
-                <input type="text" id="accessKey" class="input-box" placeholder="เช่น PROXYRP-1D-A1B2C3" autocomplete="off">
+                <input type="text" id="accessKey" class="input-box" placeholder="กรอกรหัสใช้งานของคุณ" autocomplete="off">
             </div>
 
             <button class="submit-btn" id="submitBtn" onclick="verifyKey()">เริ่มต้นใช้งาน</button>
@@ -476,7 +474,7 @@
             <div id="statusMsg" class="status-msg"></div>
 
             <div class="footer-note">
-                กรุณากรอกรหัสใช้งานที่ถูกต้องตามรูปแบบ
+                กรุณากรอกรหัสใช้งานที่ถูกต้อง
             </div>
         </div>
 
@@ -491,10 +489,9 @@
                 ฟังก์ชัน <span class="ui-brand-text">PROXYRP</span>
             </div>
 
-            <!-- แสดงเวลาถอยหลัง -->
             <div class="timer-box">
                 <span class="timer-label">เวลาใช้งานคงเหลือ:</span>
-                <span class="timer-value" id="countdownDisplay">24:00:00</span>
+                <span class="timer-value" id="countdownDisplay">--:--:--</span>
             </div>
 
             <div class="function-card">
@@ -549,13 +546,15 @@
     </div>
 
     <script>
-        const KEY_PATTERN = /^PROXYRP-\d+D-[\w\-]+$/i;
-        
+        // Regex บังคับให้ส่วนท้ายต้องเป็นตัวเลขความยาว 1-10 ตัวเท่านั้น (\d{1,10})
+        const DAY_PATTERN = /^PROXY-(\d+)D(\d{1,10})$/i;
+        const MONTH_PATTERN = /^PROXY-(\d+)M(\d{1,10})$/i;
+        const INF_PATTERN = /^PROXY-INF(\d{1,10})$/i;
+
         let countdownTimer = null;
-        let remainingSeconds = 86400; // เวลาเริ่มต้น 24 ชั่วโมง (86400 วินาที)
+        let remainingSeconds = 0;
         let activeKey = "";
 
-        // บันทึกรายการคีย์ที่ถูกยกเลิกใช้งานแล้ว
         let revokedKeys = JSON.parse(localStorage.getItem('proxyrp_revoked_keys') || '[]');
 
         function verifyKey() {
@@ -568,48 +567,74 @@
                 return;
             }
 
-            // ตรวจสอบว่าคีย์เคยถูกลบ/ยกเลิกไปแล้วหรือไม่
             if (revokedKeys.includes(inputKey)) {
                 statusMsg.className = 'status-msg text-error';
                 statusMsg.textContent = '✕ คีย์นี้ถูกลบออกจากระบบแล้ว ไม่สามารถใช้งานได้อีก';
                 return;
             }
 
-            if (KEY_PATTERN.test(inputKey)) {
+            let valid = false;
+            let durationSeconds = 0;
+
+            const dayMatch = inputKey.match(DAY_PATTERN);
+            if (dayMatch) {
+                valid = true;
+                const days = parseInt(dayMatch[1], 10);
+                durationSeconds = days * 24 * 3600;
+            } 
+            else {
+                const monthMatch = inputKey.match(MONTH_PATTERN);
+                if (monthMatch) {
+                    valid = true;
+                    const months = parseInt(monthMatch[1], 10);
+                    durationSeconds = months * 30 * 24 * 3600;
+                }
+                else if (INF_PATTERN.test(inputKey)) {
+                    valid = true;
+                    durationSeconds = 999 * 365 * 24 * 3600;
+                }
+            }
+
+            if (valid) {
                 activeKey = inputKey;
+                remainingSeconds = durationSeconds;
                 statusMsg.className = 'status-msg text-success';
                 statusMsg.textContent = '✓ คีย์ถูกต้อง กำลังเข้าสู่หน้า UI...';
                 
                 setTimeout(() => {
                     document.getElementById('loginPage').classList.add('hidden');
                     document.getElementById('uiPage').classList.remove('hidden');
-                    startCountdown(); // เริ่มนับถอยหลังเมื่อเข้า UI
+                    startCountdown();
                 }, 600);
 
             } else {
                 statusMsg.className = 'status-msg text-error';
-                statusMsg.textContent = '✕ คีย์ไม่ถูกต้อง หรือรูปแบบคีย์ไม่สมบูรณ์';
+                statusMsg.textContent = '✕ คีย์ไม่ถูกต้อง กรุณาตรวจสอบรหัสอีกครั้ง';
             }
         }
 
-        // เริ่มนับถอยหลังเวลาใช้งาน
         function startCountdown() {
             clearInterval(countdownTimer);
             updateTimerDisplay();
 
             countdownTimer = setInterval(() => {
-                remainingSeconds--;
-                if (remainingSeconds <= 0) {
+                if (remainingSeconds > 0) {
+                    remainingSeconds--;
+                    updateTimerDisplay();
+                } else {
                     clearInterval(countdownTimer);
                     alert("เวลาใช้งานของคุณหมดลงแล้ว ระบบจะนำคุณออกจาก UI");
                     exitToLogin();
-                } else {
-                    updateTimerDisplay();
                 }
             }, 1000);
         }
 
         function updateTimerDisplay() {
+            if (remainingSeconds > 300000000) {
+                document.getElementById('countdownDisplay').textContent = "UNLIMITED";
+                return;
+            }
+
             const hours = Math.floor(remainingSeconds / 3600);
             const minutes = Math.floor((remainingSeconds % 3600) / 60);
             const seconds = remainingSeconds % 60;
@@ -622,9 +647,8 @@
             document.getElementById('countdownDisplay').textContent = formatted;
         }
 
-        // ปุ่มออกจากระบบพร้อมยกเลิกคีย์
         function logoutAndRevokeKey() {
-            if (confirm("คุณต้องการออกจากระบบและลบคีย์นี้ออกจากระบบใช่หรือไม่? (คีย์จะไม่สามารถใช้งานได้อีก)")) {
+            if (confirm("คุณต้องการออกจากระบบและลบคีย์นี้ใช่หรือไม่? (คีย์จะไม่สามารถนำกลับมาใช้ได้อีก)")) {
                 if (activeKey) {
                     revokedKeys.push(activeKey);
                     localStorage.setItem('proxyrp_revoked_keys', JSON.stringify(revokedKeys));
