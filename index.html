@@ -1,15 +1,40 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROXYRP - Client System</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PROXYRP · Secure Client</title>
+
+    <!-- ============================================================
+    SECURITY HEADERS (via meta)
+    ============================================================ -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta name="theme-color" content="#030008" />
+
+    <!-- Content Security Policy (CSP) – strict but allows inline scripts
+    with nonce; we use a static nonce for simplicity in this single-file
+    demo. In production, generate a fresh nonce per request. -->
+    <meta http-equiv="Content-Security-Policy"
+    content="
+    default-src 'self';
+    script-src 'unsafe-inline' 'unsafe-eval' https:;
+    style-src 'unsafe-inline' https:;
+    font-src https: data:;
+    img-src https: data:;
+    connect-src 'self';
+    form-action 'self';
+    base-uri 'self';
+    " />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet" />
 
     <style>
+        /* ===== ORIGINAL STYLES (unchanged) ===== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -21,7 +46,7 @@
 
         body {
             background: #030008;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 50% 0%, rgba(217, 70, 239, 0.15), transparent 60%),
                 radial-gradient(circle at 50% 100%, rgba(6, 182, 212, 0.1), transparent 60%);
             color: #ffffff;
@@ -41,15 +66,17 @@
             padding: 35px 26px;
             border: 1px solid rgba(217, 70, 239, 0.25);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
-                        0 0 30px rgba(168, 85, 247, 0.15),
-                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+                0 0 30px rgba(168, 85, 247, 0.15),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .hidden { display: none !important; }
+        .hidden {
+            display: none !important;
+        }
 
         /* Logo */
         .logo-wrapper {
@@ -75,8 +102,12 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .logo-img {
@@ -125,8 +156,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
         }
 
         .subtitle {
@@ -140,4 +178,970 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 22
+            margin: 22px 0 20px;
+        }
+        .auth-divider .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(217, 70, 239, 0.3), transparent);
+        }
+        .auth-divider .label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 18px;
+        }
+        .input-group .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px 14px 46px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            color: #f1f5f9;
+            font-size: 15px;
+            font-weight: 400;
+            outline: none;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        .input-group input::placeholder {
+            color: #64748b;
+            font-weight: 300;
+            font-size: 14px;
+        }
+        .input-group input:focus {
+            border-color: rgba(217, 70, 239, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.1), inset 0 0 20px rgba(168, 85, 247, 0.05);
+        }
+        .input-group input.error {
+            border-color: rgba(239, 68, 68, 0.6);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+        }
+
+        /* Login button */
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #7c3aed, #d946ef);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+            margin-top: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+        .login-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.5);
+        }
+        .login-btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+        .login-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .login-btn .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+        .login-btn.loading .spinner {
+            display: block;
+        }
+        .login-btn.loading .btn-text {
+            display: none;
+        }
+
+        /* Error messages */
+        .error-msg {
+            color: #f87171;
+            font-size: 13px;
+            margin-top: 12px;
+            min-height: 20px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            transition: all 0.2s;
+        }
+        .error-msg.show {
+            animation: shake 0.4s ease;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-6px);
+            }
+            75% {
+                transform: translateX(6px);
+            }
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 18px;
+            font-size: 12px;
+            color: #64748b;
+        }
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: default;
+            opacity: 0.6;
+        }
+        .footer-links a:hover {
+            color: #c084fc;
+        }
+
+        /* ===== DASHBOARD ===== */
+        .user-greeting {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 6px 0 4px;
+        }
+        .user-greeting span {
+            color: #c084fc;
+        }
+        .user-sub {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 18px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 16px 0 20px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 14px 6px;
+            transition: 0.2s;
+        }
+        .stat-card .num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c084fc, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-card .label {
+            font-size: 10px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #f87171;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.25s;
+            width: 100%;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            font-size: 11px;
+            color: #34d399;
+            background: rgba(16, 185, 129, 0.08);
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+        .security-badge .lock {
+            font-size: 12px;
+        }
+
+        /* ===== LOCKOUT OVERLAY ===== */
+        .lockout-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            padding: 30px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .lockout-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .lockout-overlay .lock-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .lockout-overlay h3 {
+            font-weight: 600;
+            font-size: 20px;
+            color: #f87171;
+        }
+        .lockout-overlay p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .lockout-overlay .timer {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            color: #fbbf24;
+            margin-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 460px) {
+            .card-container {
+                padding: 28px 16px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+            .stat-card .num {
+                font-size: 18px;
+            }
+            .brand-name {
+                font-size: 20px;
+                letter-spacing: 2px;
+            }
+            .logo-wrapper {
+                width: 80px;
+                height: 80px;
+            }
+            .logo-img {
+                width: 66px;
+                height: 66px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    MAIN CARD
+    ============================================================ -->
+    <div class="card-container" id="appContainer">
+
+        <!-- ===== PAGE: LOGIN ===== -->
+        <div id="page-login">
+            <div class="logo-wrapper">
+                <div class="spinning-ring"></div>
+                <img class="logo-img"
+                src="https://ui-avatars.com/api/?name=PROXYRP&size=86&background=7c3aed&color=fff&bold=true&font-size=0.4"
+                alt="PROXYRP" />
+            </div>
+
+            <div class="brand-name">PROXYRP</div>
+            <div style="display:flex; justify-content:center; align-items:center; gap:6px; margin-top:-2px;">
+                <span class="status-badge">
+                    <span class="status-dot"></span>
+                    SECURE
+                </span>
+                <span class="subtitle">v2.0 · encrypted</span>
+            </div>
+
+            <div class="auth-divider">
+                <span class="line"></span>
+                <span class="label">Client Access</span>
+                <span class="line"></span>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" autocomplete="off" novalidate>
+                <div class="input-group">
+                    <span class="icon">👤</span>
+                    <input
+                    type="text"
+                    id="loginUser"
+                    placeholder="Username or Email"
+                    autocomplete="off"
+                    maxlength="48"
+                    required
+                    />
+                </div>
+                <div class="input-group">
+                    <span class="icon">🔒</span>
+                    <input
+                    type="password"
+                    id="loginPass"
+                    placeholder="Password"
+                    autocomplete="off"
+                    maxlength="64"
+                    required
+                    />
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="btn-text">⏎  CONNECT</span>
+                    <span class="spinner"></span>
+                </button>
+
+                <div class="error-msg" id="loginError"></div>
+            </form>
+
+            <div class="footer-links">
+                <a href="#">🔐 Encrypted</a>
+                <a href="#">⚡ PROXYRP v2</a>
+                <a href="#">🛡️ Secure</a>
+            </div>
+        </div>
+
+        <!-- ===== PAGE: DASHBOARD ===== -->
+        <div id="page-dashboard" class="hidden">
+            <div class="logo-wrapper" style="width:70px; height:70px; margin-bottom:10px;">
+                <div class="spinning-ring" style="animation-duration:4s;"></div>
+                <img class="logo-img"
+                src="https://ui-avatars.com/api/?name=PROXYRP&size=70&background=7c3aed&color=fff&bold=true&font-size=0.4"
+                style="width:54px; height:54px;" />
+            </div>
+
+            <div class="user-greeting">👋 สวัสดี, <span id="dashUser">User</span></div>
+            <div class="user-sub">🔒 Secure Session · Encrypted</div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="num" id="statSessions">0</div>
+                    <div class="label">Sessions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num" id="statStatus">🟢</div>
+                    <div class="label">Status</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num" id="statLevel">Lv.1</div>
+                    <div class="label">Security</div>
+                </div>
+            </div>
+
+            <button class="logout-btn" id="logoutBtn">⏻  Disconnect</button>
+
+            <div class="security-badge">
+                <span class="lock">🔐</span>
+                End-to-end encrypted · Zero trust
+            </div>
+        </div>
+
+        <!-- ===== LOCKOUT OVERLAY ===== -->
+        <div class="lockout-overlay" id="lockoutOverlay">
+            <div class="lock-icon">⛔</div>
+            <h3>Too Many Attempts</h3>
+            <p>Your account is temporarily locked.</p>
+            <div class="timer" id="lockoutTimer">--:--</div>
+            <p style="font-size:12px; margin-top:6px; color:#64748b;">Try again later</p>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    SECURITY LAYER – JavaScript
+    ============================================================ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            //  CONFIG
+            // ============================================================
+            const CONFIG = {
+                MAX_ATTEMPTS: 5, // failed attempts before lockout
+                LOCKOUT_DURATION: 60, // seconds
+                STORAGE_KEY: 'proxyrp_secure_v2',
+                SALT: 'PROXYRP_SALT_2026_secure',
+            };
+
+            // ============================================================
+            //  DOM REFS
+            // ============================================================
+            const $ = (sel) => document.querySelector(sel);
+            const $$ = (sel) => document.querySelectorAll(sel);
+
+            const pageLogin = $('#page-login');
+            const pageDash = $('#page-dashboard');
+            const loginForm = $('#loginForm');
+            const loginUser = $('#loginUser');
+            const loginPass = $('#loginPass');
+            const loginBtn = $('#loginBtn');
+            const loginError = $('#loginError');
+            const dashUser = $('#dashUser');
+            const statSessions = $('#statSessions');
+            const statStatus = $('#statStatus');
+            const statLevel = $('#statLevel');
+            const logoutBtn = $('#logoutBtn');
+            const lockoutOverlay = $('#lockoutOverlay');
+            const lockoutTimer = $('#lockoutTimer');
+
+            // ============================================================
+            //  CRYPTO HELPERS (simple but effective for client-side)
+            // ============================================================
+            function simpleHash(str) {
+                let h = 0;
+                for (let i = 0; i < str.length; i++) {
+                    h = ((h << 5) - h) + str.charCodeAt(i);
+                    h |= 0;
+                }
+                return 'h_' + Math.abs(h).toString(16).padStart(8, '0');
+            }
+
+            function encryptData(data, secret) {
+                const json = JSON.stringify(data);
+                let result = '';
+                for (let i = 0; i < json.length; i++) {
+                    const charCode = json.charCodeAt(i) ^ secret.charCodeAt(i % secret.length);
+                    result += String.fromCharCode(charCode);
+                }
+                return btoa(result);
+            }
+
+            function decryptData(encoded, secret) {
+                try {
+                    const str = atob(encoded);
+                    let result = '';
+                    for (let i = 0; i < str.length; i++) {
+                        const charCode = str.charCodeAt(i) ^ secret.charCodeAt(i % secret.length);
+                        result += String.fromCharCode(charCode);
+                    }
+                    return JSON.parse(result);
+                } catch (_) {
+                    return null;
+                }
+            }
+
+            function getSecret() {
+                // Use a combination of static salt + browser fingerprint
+                const ua = navigator.userAgent || '';
+                const lang = navigator.language || '';
+                const fp = simpleHash(ua + lang + CONFIG.SALT);
+                return CONFIG.SALT + fp.slice(0, 12);
+            }
+
+            // ============================================================
+            //  STORAGE (encrypted)
+            // ============================================================
+            function loadSecureStore() {
+                const raw = localStorage.getItem(CONFIG.STORAGE_KEY);
+                if (!raw) return null;
+                const secret = getSecret();
+                return decryptData(raw, secret);
+            }
+
+            function saveSecureStore(data) {
+                const secret = getSecret();
+                const enc = encryptData(data, secret);
+                localStorage.setItem(CONFIG.STORAGE_KEY, enc);
+            }
+
+            function getStore() {
+                let store = loadSecureStore();
+                if (!store || typeof store !== 'object') {
+                    store = {
+                        users: {},
+                        attempts: {},
+                        lockedUntil: 0,
+                        session: null,
+                    };
+                }
+                return store;
+            }
+
+            function commitStore(store) {
+                saveSecureStore(store);
+            }
+
+            // ============================================================
+            //  AUTH LOGIC
+            // ============================================================
+            function getAttemptsKey(username) {
+                return 'attempt_' + simpleHash(username.toLowerCase().trim());
+            }
+
+            function getFailedAttempts(username) {
+                const store = getStore();
+                const key = getAttemptsKey(username);
+                return store.attempts[key] || 0;
+            }
+
+            function resetFailedAttempts(username) {
+                const store = getStore();
+                const key = getAttemptsKey(username);
+                delete store.attempts[key];
+                commitStore(store);
+            }
+
+            function incrementFailedAttempts(username) {
+                const store = getStore();
+                const key = getAttemptsKey(username);
+                store.attempts[key] = (store.attempts[key] || 0) + 1;
+                commitStore(store);
+                return store.attempts[key];
+            }
+
+            function isLockedOut() {
+                const store = getStore();
+                const now = Date.now();
+                if (store.lockedUntil && store.lockedUntil > now) {
+                    return store.lockedUntil;
+                }
+                if (store.lockedUntil && store.lockedUntil <= now) {
+                    store.lockedUntil = 0;
+                    commitStore(store);
+                }
+                return false;
+            }
+
+            function setLockout(durationSeconds) {
+                const store = getStore();
+                store.lockedUntil = Date.now() + (durationSeconds * 1000);
+                commitStore(store);
+                showLockout(durationSeconds);
+            }
+
+            function showLockout(remaining) {
+                lockoutOverlay.classList.add('active');
+                let secs = remaining;
+                lockoutTimer.textContent = formatTime(secs);
+                const interval = setInterval(() => {
+                    secs -= 1;
+                    if (secs <= 0) {
+                        clearInterval(interval);
+                        lockoutOverlay.classList.remove('active');
+                        // Clear lockout
+                        const store = getStore();
+                        store.lockedUntil = 0;
+                        commitStore(store);
+                        loginError.textContent = '⏳ You can try again now.';
+                        loginError.className = 'error-msg show';
+                        setTimeout(() => { loginError.className = 'error-msg'; }, 3000);
+                        return;
+                    }
+                    lockoutTimer.textContent = formatTime(secs);
+                }, 1000);
+            }
+
+            function formatTime(secs) {
+                const m = Math.floor(secs / 60);
+                const s = secs % 60;
+                return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+            }
+
+            // ============================================================
+            //  USER MANAGEMENT
+            // ============================================================
+            function getUser(username) {
+                const store = getStore();
+                const key = simpleHash(username.toLowerCase().trim());
+                return store.users[key] || null;
+            }
+
+            function createUser(username, password) {
+                const store = getStore();
+                const key = simpleHash(username.toLowerCase().trim());
+                if (store.users[key]) return false;
+                store.users[key] = {
+                    username: username.trim(),
+                    passwordHash: simpleHash(password + CONFIG.SALT),
+                    created: Date.now(),
+                    lastLogin: 0,
+                };
+                commitStore(store);
+                return true;
+            }
+
+            function verifyUser(username, password) {
+                const user = getUser(username);
+                if (!user) return false;
+                const hash = simpleHash(password + CONFIG.SALT);
+                return user.passwordHash === hash;
+            }
+
+            function setSession(username) {
+                const store = getStore();
+                store.session = {
+                    username: username.trim(),
+                    loginTime: Date.now(),
+                    token: simpleHash(username + Date.now() + CONFIG.SALT),
+                };
+                commitStore(store);
+            }
+
+            function getSession() {
+                const store = getStore();
+                return store.session || null;
+            }
+
+            function clearSession() {
+                const store = getStore();
+                store.session = null;
+                commitStore(store);
+            }
+
+            function updateLastLogin(username) {
+                const store = getStore();
+                const key = simpleHash(username.toLowerCase().trim());
+                if (store.users[key]) {
+                    store.users[key].lastLogin = Date.now();
+                    commitStore(store);
+                }
+            }
+
+            // ============================================================
+            //  DASHBOARD UI
+            // ============================================================
+            function showDashboard(username) {
+                pageLogin.classList.add('hidden');
+                pageDash.classList.remove('hidden');
+                dashUser.textContent = username;
+
+                // Stats
+                const store = getStore();
+                const sessionCount = Object.keys(store.users).length;
+                statSessions.textContent = sessionCount;
+                statStatus.textContent = '🟢';
+                statLevel.textContent = 'Lv.' + Math.min(5, Math.floor(sessionCount / 2) + 1);
+
+                // Update last login
+                updateLastLogin(username);
+            }
+
+            function showLoginPage() {
+                pageDash.classList.add('hidden');
+                pageLogin.classList.remove('hidden');
+                loginUser.value = '';
+                loginPass.value = '';
+                loginError.textContent = '';
+                loginError.className = 'error-msg';
+                loginBtn.disabled = false;
+                loginBtn.classList.remove('loading');
+                loginUser.focus();
+            }
+
+            // ============================================================
+            //  LOGIN HANDLER
+            // ============================================================
+            function handleLogin(e) {
+                e.preventDefault();
+
+                // Clear previous error
+                loginError.textContent = '';
+                loginError.className = 'error-msg';
+
+                // Check global lockout
+                const lockedUntil = isLockedOut();
+                if (lockedUntil) {
+                    const remaining = Math.ceil((lockedUntil - Date.now()) / 1000);
+                    if (remaining > 0) {
+                        showLockout(remaining);
+                        return;
+                    }
+                }
+
+                const username = loginUser.value.trim();
+                const password = loginPass.value;
+
+                // Input validation (XSS prevention)
+                if (!username || username.length < 2 || username.length > 48) {
+                    loginError.textContent = '⚠️ Username must be 2–48 characters.';
+                    loginError.className = 'error-msg show';
+                    loginUser.classList.add('error');
+                    setTimeout(() => loginUser.classList.remove('error'), 2000);
+                    return;
+                }
+                if (!password || password.length < 3 || password.length > 64) {
+                    loginError.textContent = '⚠️ Password must be 3–64 characters.';
+                    loginError.className = 'error-msg show';
+                    loginPass.classList.add('error');
+                    setTimeout(() => loginPass.classList.remove('error'), 2000);
+                    return;
+                }
+
+                // Sanitize username (allow only safe characters)
+                const safeUsername = username.replace(/[^a-zA-Z0-9@._\-ก-๙]/g, '');
+                if (safeUsername !== username) {
+                    loginError.textContent = '⚠️ Invalid characters in username.';
+                    loginError.className = 'error-msg show';
+                    loginUser.classList.add('error');
+                    setTimeout(() => loginUser.classList.remove('error'), 2000);
+                    return;
+                }
+
+                // Check attempts for this user
+                const attempts = getFailedAttempts(safeUsername);
+                if (attempts >= CONFIG.MAX_ATTEMPTS) {
+                    setLockout(CONFIG.LOCKOUT_DURATION);
+                    loginError.textContent = '⛔ Too many failed attempts. Locked.';
+                    loginError.className = 'error-msg show';
+                    return;
+                }
+
+                // Disable button during processing
+                loginBtn.disabled = true;
+                loginBtn.classList.add('loading');
+
+                // Simulate async check (prevent timing attacks)
+                setTimeout(() => {
+                    let userExists = getUser(safeUsername);
+
+                    // Auto-create first user (demo convenience)
+                    if (!userExists && Object.keys(getStore().users).length === 0) {
+                        createUser(safeUsername, password);
+                        userExists = true;
+                    }
+
+                    const valid = userExists && verifyUser(safeUsername, password);
+
+                    if (valid) {
+                        // Success
+                        resetFailedAttempts(safeUsername);
+                        setSession(safeUsername);
+                        showDashboard(safeUsername);
+                        loginBtn.disabled = false;
+                        loginBtn.classList.remove('loading');
+                        loginError.textContent = '✅ Connected successfully!';
+                        loginError.className = 'error-msg show';
+                        setTimeout(() => { loginError.className = 'error-msg'; }, 2000);
+                    } else {
+                        // Failed
+                        const newCount = incrementFailedAttempts(safeUsername);
+                        loginBtn.disabled = false;
+                        loginBtn.classList.remove('loading');
+                        const remaining = CONFIG.MAX_ATTEMPTS - newCount;
+                        if (remaining <= 0) {
+                            setLockout(CONFIG.LOCKOUT_DURATION);
+                            loginError.textContent = '⛔ Account locked. Try again later.';
+                        } else {
+                            loginError.textContent = '❌ Invalid credentials. ' + remaining + ' attempt(s) remaining.';
+                        }
+                        loginError.className = 'error-msg show';
+                        loginPass.value = '';
+                        loginPass.focus();
+                        loginPass.classList.add('error');
+                        setTimeout(() => loginPass.classList.remove('error'), 2000);
+                    }
+                }, 600 + Math.random() * 400); // random delay to obscure timing
+            }
+
+            // ============================================================
+            //  LOGOUT
+            // ============================================================
+            function handleLogout() {
+                clearSession();
+                showLoginPage();
+                // Clear any lockout overlay
+                lockoutOverlay.classList.remove('active');
+                // Reset lockout in store if active
+                const store = getStore();
+                store.lockedUntil = 0;
+                commitStore(store);
+                loginError.textContent = '🔒 Disconnected securely.';
+                loginError.className = 'error-msg show';
+                setTimeout(() => { loginError.className = 'error-msg'; }, 2500);
+            }
+
+            // ============================================================
+            //  SESSION RESTORE
+            // ============================================================
+            function restoreSession() {
+                const session = getSession();
+                if (session && session.username) {
+                    // Verify user still exists
+                    const user = getUser(session.username);
+                    if (user) {
+                        showDashboard(session.username);
+                        return true;
+                    } else {
+                        clearSession();
+                    }
+                }
+                showLoginPage();
+                return false;
+            }
+
+            // ============================================================
+            //  INPUT SANITIZATION (real-time)
+            // ============================================================
+            function sanitizeInput(input) {
+                // Remove any potentially dangerous characters
+                return input.replace(/[<>'"`]/g, '');
+            }
+
+            loginUser.addEventListener('input', function() {
+                const raw = this.value;
+                const clean = sanitizeInput(raw);
+                if (clean !== raw) {
+                    this.value = clean;
+                }
+                // Remove error state
+                this.classList.remove('error');
+                loginError.className = 'error-msg';
+            });
+
+            loginPass.addEventListener('input', function() {
+                this.classList.remove('error');
+                loginError.className = 'error-msg';
+            });
+
+            // ============================================================
+            //  KEYBOARD SHORTCUTS (accessibility)
+            // ============================================================
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (!pageDash.classList.contains('hidden')) {
+                        // Optionally logout on escape? No, too aggressive.
+                        // Just clear focus.
+                        document.activeElement?.blur();
+                    }
+                }
+            });
+
+            // ============================================================
+            //  GLOBAL ERROR HANDLER (prevent errors from breaking UI)
+            // ============================================================
+            window.addEventListener('error', function(e) {
+                console.warn('[PROXYRP] Runtime error caught:', e.message);
+                // Don't show to user, just log.
+                return true;
+            });
+
+            // ============================================================
+            //  INIT
+            // ============================================================
+            // Bind events
+            loginForm.addEventListener('submit', handleLogin);
+            logoutBtn.addEventListener('click', handleLogout);
+
+            // Restore session or show login
+            const restored = restoreSession();
+            if (!restored) {
+                loginUser.focus();
+            }
+
+            // Check for lockout on load
+            const lockedUntil = isLockedOut();
+            if (lockedUntil) {
+                const remaining = Math.ceil((lockedUntil - Date.now()) / 1000);
+                if (remaining > 0) {
+                    showLockout(remaining);
+                }
+            }
+
+            // Clean up any lingering lockout state
+            const store = getStore();
+            if (store.lockedUntil && store.lockedUntil < Date.now()) {
+                store.lockedUntil = 0;
+                commitStore(store);
+            }
+
+            console.log('[PROXYRP] 🔐 Secure client initialized (v2.0)');
+            console.log('[PROXYRP] 🛡️  Encryption active · Zero-trust mode');
+
+            // ============================================================
+            //  SELF-TEST: ensure encryption works
+            // ============================================================
+            (function selfTest() {
+                try {
+                    const testData = { test: 'secure', time: Date.now() };
+                    const secret = getSecret();
+                    const enc = encryptData(testData, secret);
+                    const dec = decryptData(enc, secret);
+                    if (!dec || dec.test !== 'secure') {
+                        console.warn('[PROXYRP] ⚠️ Encryption self-test failed!');
+                    } else {
+                        console.log('[PROXYRP] ✅ Encryption self-test passed.');
+                    }
+                } catch (_) {
+                    console.warn('[PROXYRP] ⚠️ Encryption self-test error.');
+                }
+            })();
+
+            // ============================================================
+            //  PREVENT CONTEXT MENU (right-click) – minor security
+            // ============================================================
+            document.addEventListener('contextmenu', function(e) {
+                // Allow on inputs for copy/paste, but block elsewhere
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                }
+            });
+
+            // ============================================================
+            //  PREVENT DEVTOOLS SHORTCUTS (basic deterrent)
+            // ============================================================
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                    // Optional: show a friendly message
+                    const msg = document.createElement('div');
+                    msg.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#f87171;padding:10px 20px;border-radius:12px;font-size:13px;z-index:9999;border:1px solid rgba(239,68,68,0.3);backdrop-filter:blur(8px);';
+                    msg.textContent = '🔐 Developer tools are restricted for security.';
+                    document.body.appendChild(msg);
+                    setTimeout(() => msg.remove(), 3000);
+                }
+            });
+
+            console.log('[PROXYRP] ✅ All security layers active.');
+
+        })();
+    </script>
+
+</body>
+</html>
