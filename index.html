@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Protected Website</title>
     
     <style>
-        /* 1. ป้องกันการคลุมดำเลือกข้อความ (Disable Text Selection) */
+        /* 1. Disable Text Selection */
         * {
             -webkit-user-select: none; /* Safari */
             -moz-user-select: none;    /* Firefox */
@@ -51,58 +51,57 @@
 <body>
 
     <div class="container">
-        <h1>ยินดีต้อนรับสู่เว็บไซต์</h1>
-        <p>เนื้อหาและข้อมูลในหน้านี้ได้รับการปกป้องด้วยระบบ Anti-Scraping</p>
+        <h1>Welcome to Our Website</h1>
+        <p>The content on this page is protected by an Anti-Scraping system.</p>
     </div>
 
     <script>
         // ==========================================
-        // 1. ป้องกันการคลิกขวา (Disable Right Click)
+        // 1. Disable Right Click
         // ==========================================
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
 
         // ==========================================
-        // 2. ป้องกันปุ่มคีย์ลัดสำหรับเปิด Developer Tools & ดูโค้ด
+        // 2. Disable Shortcut Keys for DevTools & View Source
         // ==========================================
         document.addEventListener('keydown', function(e) {
-            // บล็อก F12
+            // Block F12
             if (e.key === 'F12') {
                 e.preventDefault();
             }
-            // บล็อก Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
+            // Block Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
             if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
                 e.preventDefault();
             }
-            // บล็อก Ctrl+U (View Source)
+            // Block Ctrl+U (View Source)
             if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
                 e.preventDefault();
             }
-            // บล็อก Ctrl+S (Save Page)
+            // Block Ctrl+S (Save Page)
             if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
                 e.preventDefault();
             }
         });
 
         // ==========================================
-        // 3. ตรวจสอบการเปิด Developer Tools (Console Debugger Protection)
+        // 3. Console Debugger Protection
         // ==========================================
         setInterval(function() {
             const startTime = performance.now();
-            debugger; // หากมีคนเปิด F12 ค้างไว้ สคริปต์จะติด Debugger ทำให้เว็บทำงานช้าลงหรือค้าง
+            debugger; // Freezes execution if DevTools is open
             const endTime = performance.now();
             if (endTime - startTime > 100) {
-                // ตรวจพบว่ามีการเปิด DevTools
+                // DevTools open detected
                 document.body.innerHTML = '<h1 style="text-align:center; margin-top:20vh; color:red;">Access Denied: Developer Tools Detected</h1>';
             }
         }, 1000);
 
         // ==========================================
-        // 4. เช็กพื้นฐานว่าผู้ใช้เปิด JavaScript หรือไม่
+        // 4. Session Verification
         // ==========================================
         window.addEventListener('DOMContentLoaded', () => {
-            // สามารถเพิ่มโค้ดส่ง Token ยืนยันตัวตนไปยัง Back-end API ได้ที่นี่
             console.log("Protected Session Active");
         });
     </script>
