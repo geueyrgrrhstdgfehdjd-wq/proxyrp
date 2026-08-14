@@ -1,98 +1,110 @@
 <!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <title>Just a moment...</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="robots" content="noindex,nofollow">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <meta http-equiv="content-security-policy" content="default-src &#39;none&#39;; script-src &#39;nonce-PLJx4XiQpRFCRVQECb3avw&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; img-src &#39;self&#39; https://challenges.cloudflare.com; connect-src &#39;self&#39; https://challenges.cloudflare.com; frame-src &#39;self&#39; https://challenges.cloudflare.com blob:; child-src &#39;self&#39; https://challenges.cloudflare.com blob:; worker-src blob:; form-action http: https:; base-uri &#39;self&#39;">
-        <style>
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0
-            }
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Protected Website</title>
+    
+    <style>
+        /* 1. ป้องกันการคลุมดำเลือกข้อความ (Disable Text Selection) */
+        * {
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE / Edge */
+            user-select: none;         /* Standard */
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-            html {
-                line-height: 1.15;
-                -webkit-text-size-adjust: 100%;
-                color: #313131;
-                font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
-            }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-            body {
-                display: flex;
-                flex-direction: column;
-                height: 100vh;
-                min-height: 100vh
-            }
+        .container {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
 
-            .main-content {
-                margin: 8rem auto;
-                padding-left: 1.5rem;
-                max-width: 60rem
-            }
+        h1 {
+            color: #1a73e8;
+            margin-bottom: 1rem;
+        }
 
-            @media (width <=720px) {
-                .main-content {
-                    margin-top: 4rem
-                }
-            }
+        p {
+            line-height: 1.6;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
 
-            #challenge-error-text {
-                background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0IyMEYwMyIgZD0iTTE2IDNhMTMgMTMgMCAxIDAgMTMgMTNBMTMuMDE1IDEzLjAxNSAwIDAgMCAxNiAzbTAgMjRhMTEgMTEgMCAxIDEgMTEtMTEgMTEuMDEgMTEuMDEgMCAwIDEtMTEgMTEiLz48cGF0aCBmaWxsPSIjQjIwRjAzIiBkPSJNMTcuMDM4IDE4LjYxNUgxNC44N0wxNC41NjMgOS41aDIuNzgzem0tMS4wODQgMS40MjdxLjY2IDAgMS4wNTcuMzg4LjQwNy4zODkuNDA3Ljk5NCAwIC41OTYtLjQwNy45ODQtLjM5Ny4zOS0xLjA1Ny4zODktLjY1IDAtMS4wNTYtLjM4OS0uMzk4LS4zODktLjM5OC0uOTg0IDAtLjU5Ny4zOTgtLjk4NS40MDYtLjM5NyAxLjA1Ni0uMzk3Ii8+PC9zdmc+");
-                background-repeat: no-repeat;
-                background-size: contain;
-                padding-left: 34px
+    <div class="container">
+        <h1>ยินดีต้อนรับสู่เว็บไซต์</h1>
+        <p>เนื้อหาและข้อมูลในหน้านี้ได้รับการปกป้องด้วยระบบ Anti-Scraping</p>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. ป้องกันการคลิกขวา (Disable Right Click)
+        // ==========================================
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // ==========================================
+        // 2. ป้องกันปุ่มคีย์ลัดสำหรับเปิด Developer Tools & ดูโค้ด
+        // ==========================================
+        document.addEventListener('keydown', function(e) {
+            // บล็อก F12
+            if (e.key === 'F12') {
+                e.preventDefault();
             }
-        </style>
-        <meta http-equiv="refresh" content="360">
-    </head>
-    <body>
-        <div class="main-wrapper" role="main">
-            <div class="main-content">
-                <noscript>
-                    <div class="h2">
-                        <span id="challenge-error-text">Enable JavaScript and cookies to continue</span>
-                    </div>
-                </noscript>
-            </div>
-        </div>
-        <script nonce="PLJx4XiQpRFCRVQECb3avw">
-            (function() {
-                window._cf_chl_opt = {
-                    cFPWv: 'g',
-                    cH: 'iCd0Y5NuzULJkI1uxz2kXHYr_Ncmsz2bAZIXY1L0b4o-1786554149-1.2.1.1-U2jf6q.S6zoI.ZP2IRoDubGJ2YvMmdfL4UVaoSoI6hNhIkB8lKDBpjOL8ywwGtPE',
-                    cITimeS: '1786554149',
-                    cN: 'PLJx4XiQpRFCRVQECb3avw',
-                    cRay: 'a2a10c4b081bf96f',
-                    cTplB: '0',
-                    cTplC: 0,
-                    cTplO: 0,
-                    cTplV: 5,
-                    cType: 'managed',
-                    cUPMDTk: "/?__cf_chl_tk=oLAgyNE1W0L0cnGoG8ZY.gyaFDJceYksap_n53M4Myw-1786554149-1.0.1.1-91Q6MZbGEB1c5RONYhZmhmWr2ZZ5Tp2Bttex4qLseWo",
-                    cvId: '3',
-                    cZone: 'nextrastore.hiddencb.xyz',
-                    fa: "/?__cf_chl_f_tk=oLAgyNE1W0L0cnGoG8ZY.gyaFDJceYksap_n53M4Myw-1786554149-1.0.1.1-91Q6MZbGEB1c5RONYhZmhmWr2ZZ5Tp2Bttex4qLseWo",
-                    md: 'khclAj9Z6KVuSg0yMLE.p.kXzWEmpNsSEZlIFhcTazQ-1786554149-1.2.1.1-fg.qABV9v0XTgFD3HrQN12YUWhOA_6eVmjQpkwb.mJgPhfzTczzj1s6t2XnT0L1dyYiO_X36PLAbj9uoaORl7ho1Y4.WeoskMnYbj1tMYeoxY96_MgRH47HfoGsT6jOm9mdQLfQMJhj84eBRmvek7FeFw1T_8L4Ta6PZEV1fZdqXij62kVOEGOyt9kl0H1jAyakmRhxOF0VarVlA_QzzBiiEKk8dnbmCYQZBbPREvtbsA9bIHBNeRjxVYzp7NS6OvTFIGrY6Y1e8QjGq4CZOvma082qVM02fsFRLeLHiZ48otRP4HsIVfIWYZ.evzzrI.J1.p8BXxaaci9QeNPFIq_fV2Y0GIKoyuZSXEjIYePgR5w9FQOKjTKVOBpD5ZMd69NJtwLmaVSMsHODnVduJWe6qyfNSv8DU.ALXRI4TUEIuRCK5SLZVT40xXcJ__7HEdKTtvLqULtShTcoPVQzImSapMlSSc7Ojp0Wi.gJLXDg._0wLlai7ZTe1GGGK76i38F4aIWLS1bM6lIkVdUBr1udgKo281kdj3rFSOOIogjVLju.fwbYzmtxRQsXjPGHaKb2fAFyJPNt55.0yfz4p4KtbLAD08uyfDSDJ8CK2vofd4Tqv6tqQ9z6zyuxfI0MMLpJtsYL6czEfUzdbEXxvzb56xgh3YguuhmfqGgdqy4saB.za8c1Celvn7TiK92l8CGAMeR05oL1kCNuTVarXCTocXrD8Uh9A6dYHnapme8RqSyzVAZ2K.h2lJD5sjNm3xaT3W06ealh0uyCmiDorpH5O5aQM45LHK3ZI72zprHo2utK6oCjg5YmprFmRWOpnUhJvWwQC8w.WoD57oRjDo3AZKkykxW.dDKlePP9jb2UA6MneD4zgXlIaoK61_.8H1.lQ8SzlcSYRc25lj9tlBEG8_JNGKNL65hz4V1FRuJ8y5xgRp2dEVnoqyNFWMCrf',
-                    mdrd: 'MB2gs9XqJwDHu2vL5qU3WL4eCIIBHGw.rDFko7nFRQs-1786554149-1.2.1.1-pc7KEIKnVALRivq9r6Y6jX8oKawzjgfb9EXfAshJ67JFUUk5DtYkCRkCzeqJzVqaHZalo2QBofdiKp792OdRav_cHdwAvzYYJbmka15E45Trizh5V.9woYD1KYbDcC_n1tyBp58MOxckhJ4hBSMGb9gr6ITXdnO_tRQw_XV8JkhbpwJ3BYN.QvrO5rsXC3J8YO7Aw9d46P7u5rbUWqgRZg',
-                };
-                var a = document.createElement('script');
-                a.nonce = 'PLJx4XiQpRFCRVQECb3avw';
-                a.src = '/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=a2a10c4b081bf96f';
-                window._cf_chl_opt.cOgUHash = location.hash === '' && location.href.indexOf('#') !== -1 ? '#' : location.hash;
-                window._cf_chl_opt.cOgUQuery = location.search === '' && location.href.slice(0, location.href.length - window._cf_chl_opt.cOgUHash.length).indexOf('?') !== -1 ? '?' : location.search;
-                if (window.history && window.history.replaceState) {
-                    var ogU = location.pathname + window._cf_chl_opt.cOgUQuery + window._cf_chl_opt.cOgUHash;
-                    history.replaceState(null, null, "/?__cf_chl_rt_tk=oLAgyNE1W0L0cnGoG8ZY.gyaFDJceYksap_n53M4Myw-1786554149-1.0.1.1-91Q6MZbGEB1c5RONYhZmhmWr2ZZ5Tp2Bttex4qLseWo" + window._cf_chl_opt.cOgUHash);
-                    a.onload = function() {
-                        history.replaceState(null, null, ogU);
-                    }
-                }
-                document.getElementsByTagName('head')[0].appendChild(a);
-            }());
-        </script>
-    </body>
+            // บล็อก Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (DevTools)
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                e.preventDefault();
+            }
+            // บล็อก Ctrl+U (View Source)
+            if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+                e.preventDefault();
+            }
+            // บล็อก Ctrl+S (Save Page)
+            if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+                e.preventDefault();
+            }
+        });
+
+        // ==========================================
+        // 3. ตรวจสอบการเปิด Developer Tools (Console Debugger Protection)
+        // ==========================================
+        setInterval(function() {
+            const startTime = performance.now();
+            debugger; // หากมีคนเปิด F12 ค้างไว้ สคริปต์จะติด Debugger ทำให้เว็บทำงานช้าลงหรือค้าง
+            const endTime = performance.now();
+            if (endTime - startTime > 100) {
+                // ตรวจพบว่ามีการเปิด DevTools
+                document.body.innerHTML = '<h1 style="text-align:center; margin-top:20vh; color:red;">Access Denied: Developer Tools Detected</h1>';
+            }
+        }, 1000);
+
+        // ==========================================
+        // 4. เช็กพื้นฐานว่าผู้ใช้เปิด JavaScript หรือไม่
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            // สามารถเพิ่มโค้ดส่ง Token ยืนยันตัวตนไปยัง Back-end API ได้ที่นี่
+            console.log("Protected Session Active");
+        });
+    </script>
+</body>
 </html>
